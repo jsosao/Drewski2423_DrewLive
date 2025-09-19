@@ -3156,7 +3156,10 @@ https://s3.us-east-005.backblazeb2.com/tvcube/hls/0/stream.m3u8?cachebust=61e8d8
 #EXTINF:-1  tvg-name="Drew Live" tvg-id="24.7.Dummy.us" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Trunks.png" group-title="DrewLive Fan Made TV" radio="false",Drew Live
 http://drewlive24.duckdns.org:8080/hls/stream.m3u8
 #EXTINF:-1  tvg-name="EEL TV" tvg-id="24.7.Dummy.us" tvg-logo="https://www.webchnl.live/assets/img/channelicons/eel_ch.png" group-title="DrewLive Fan Made TV" radio="false",EEL TV
-https://rhine.webchnl.live/memfs/ee44b078-5b16-4484-b054-76079dc2d45c.m3u8
+#EXTVLCOPT:http-origin=https://rumble.com
+#EXTVLCOPT:http-referrer=https://rumble.com/
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:143.0) Gecko/20100101 Firefox/143.0
+https://1a-1791.com/live/t5qc33px/live-hls/bvoy-ccia/chunklist_i1_DVR.m3u8
 #EXTINF:-1  tvg-name="Retro Blast" tvg-id="24.7.Dummy.us" tvg-logo="https://static1.howtogeekimages.com/wordpress/wp-content/uploads/2025/01/shutterstock_2221828967.jpg" group-title="DrewLive Fan Made TV" radio="false",Retro Blast
 https://retroblast.tv/hls/0/stream.m3u8?cachebust=f224d41f
 #EXTINF:-1  tvg-name="Retro Strange" tvg-id="24.7.Dummy.us" tvg-logo="https://retrostrange.com/wp-content/uploads/2021/11/cropped-Channel-Thumb-300x225.png" group-title="DrewLive Fan Made TV" radio="false",Retro Strange
