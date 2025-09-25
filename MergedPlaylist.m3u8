@@ -3695,6 +3695,8 @@ https://ca01.utako.moe/familygeki/index.m3u8
 https://ca01.utako.moe/fighting_tv/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="fuji_tv" tvg-logo="https://upload.wikimedia.org/wikipedia/fr/thumb/6/65/Fuji_TV_Logo.svg/1049px-Fuji_TV_Logo.svg.png",Fuji TV
 https://mt01.utako.moe/Fuji_TV/index.m3u8
+#EXTINF:-1 group-title="JapanTV" tvg-id="fuji_tv" tvg-logo="https://upload.wikimedia.org/wikipedia/fr/thumb/6/65/Fuji_TV_Logo.svg/1049px-Fuji_TV_Logo.svg.png",Fuji TV (Primehome)
+https://epg.freejptv.com/ph.php?&isp=1&id=gd05
 #EXTINF:-1 group-title="JapanTV" tvg-id="fuji_tv_next" tvg-logo="https://www.lyngsat.com/logo/tv/ff/fuji_tv_next.png",Fuji TV NEXT
 https://ca01.utako.moe/fuji_next/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="fuji_tv_one" tvg-logo="https://www.lyngsat.com/logo/tv/ff/fuji_tv_one.png",Fuji TV ONE
@@ -3735,14 +3737,20 @@ https://mt01.utako.moe/NHK_BS/index.m3u8
 https://mt01.utako.moe/bsp4k/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="nhk_e_tokyo" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/a/aa/NHKE%E3%83%86%E3%83%AC%E3%83%AD%E3%82%B42020-.png",NHK E
 https://mt01.utako.moe/NHK_E/index.m3u8
+#EXTINF:-1 group-title="JapanTV" tvg-id="nhk_e_tokyo" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/a/aa/NHKE%E3%83%86%E3%83%AC%E3%83%AD%E3%82%B42020-.png",NHK E (Primehome)
+https://epg.freejptv.com/ph.php?&isp=1&id=gd02
 #EXTINF:-1 group-title="JapanTV" tvg-id="nhk_g_tokyo" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/6/6f/NHK%E7%B7%8F%E5%90%88%E3%83%AD%E3%82%B42020-.png",NHK G
 https://mt01.utako.moe/NHK_G/index.m3u8
+#EXTINF:-1 group-title="JapanTV" tvg-id="nhk_g_tokyo" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/6/6f/NHK%E7%B7%8F%E5%90%88%E3%83%AD%E3%82%B42020-.png",NHK G (Primehome)
+https://epg.freejptv.com/ph.php?&isp=1&id=gd01
 #EXTINF:-1 group-title="JapanTV" tvg-id="nihon_eiga" tvg-logo="https://www.lyngsat.com/logo/tv/nn/nihon_eiga_senmon.png",Nihon Eiga Senmon
 https://ca01.utako.moe/nihoneiga/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="ntv_g_tasu" tvg-logo="https://www.lyngsat-logo.com/logo/tv/nn/ntv-g-plus-jp.png",Nittele G+
 https://ca01.utako.moe/ntvgplus/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="ntv" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nippon_TV_logo_2014.svg/2560px-Nippon_TV_logo_2014.svg.png",NTV
 https://mt01.utako.moe/Nippon_TV/index.m3u8
+#EXTINF:-1 group-title="JapanTV" tvg-id="ntv" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nippon_TV_logo_2014.svg/2560px-Nippon_TV_logo_2014.svg.png",NTV (Primehome)
+https://epg.freejptv.com/ph.php?&isp=1&id=gd03
 #EXTINF:-1 group-title="JapanTV" tvg-id="pigoo" tvg-logo="https://www.lyngsat.com/logo/tv/pp/pigoo-jp.png",Pigoo (NSFW)
 https://ca01.utako.moe/pigoo/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="sky_a" tvg-logo="https://www.lyngsat.com/logo/tv/ss/sky-a-jp.svg",Sky A
@@ -3757,6 +3765,8 @@ https://mt01.utako.moe/suntv/index.m3u8
 https://ca01.utako.moe/tabi/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="tbs" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Tokyo_Broadcasting_System_logo_2020.svg/2560px-Tokyo_Broadcasting_System_logo_2020.svg.png",TBS
 https://mt01.utako.moe/TBS/index.m3u8
+#EXTINF:-1 group-title="JapanTV" tvg-id="tbs" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Tokyo_Broadcasting_System_logo_2020.svg/2560px-Tokyo_Broadcasting_System_logo_2020.svg.png",TBS (Primehome)
+https://epg.freejptv.com/ph.php?&isp=1&id=gd04
 #EXTINF:-1 group-title="JapanTV" tvg-id="tbs_channel_1" tvg-logo="https://www.lyngsat.com/logo/tv/tt/tbs-channel-1-jp.png",TBS Channel 1
 https://ca01.utako.moe/tbsch1/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="tbs_channel_2" tvg-logo="https://www.lyngsat.com/logo/tv/tt/tbs-channel-2-jp.png",TBS Channel 2
@@ -3765,10 +3775,14 @@ https://ca01.utako.moe/tbsch2/index.m3u8
 https://ca01.utako.moe/toei/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="tokyo_mx_1" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Tokyo_metropolitan_television_logo_%28rainbow%29.svg/2560px-Tokyo_metropolitan_television_logo_%28rainbow%29.svg.png",TOKYO MX1
 https://mt01.utako.moe/Tokyo_MX1/index.m3u8
+#EXTINF:-1 group-title="JapanTV" tvg-id="tokyo_mx_1" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Tokyo_metropolitan_television_logo_%28rainbow%29.svg/2560px-Tokyo_metropolitan_television_logo_%28rainbow%29.svg.png",TOKYO MX1 (Primehome)
+https://epg.freejptv.com/ph.php?&isp=1&id=gd08
 #EXTINF:-1 group-title="JapanTV" tvg-id="tokyo_mx2" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Tokyo_metropolitan_television_logo_%28rainbow%29.svg/2560px-Tokyo_metropolitan_television_logo_%28rainbow%29.svg.png",TOKYO MX2
 https://mt01.utako.moe/Tokyo_MX2/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="tv_asahi" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/TV_Asahi_Logo.svg/2560px-TV_Asahi_Logo.svg.png",TV Asahi (NSFW)
 https://mt01.utako.moe/TV_Asahi/index.m3u8
+#EXTINF:-1 group-title="JapanTV" tvg-id="tv_asahi" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/TV_Asahi_Logo.svg/2560px-TV_Asahi_Logo.svg.png",TV Asahi (NSFW) (Primehome)
+https://epg.freejptv.com/ph.php?&isp=1&id=gd06
 #EXTINF:-1 group-title="JapanTV" tvg-id="tv_asahi_channel_1" tvg-logo="https://www.lyngsat.com/logo/tv/tt/tv-asahi-channel-1-jp.png",TV Asahi Channel 1
 https://ca01.utako.moe/ex_ch1/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="tv_asahi_channel_2" tvg-logo="https://www.lyngsat.com/logo/tv/tt/tv-asahi-channel-2-jp.png",TV Asahi Channel 2
@@ -3777,6 +3791,8 @@ https://ca01.utako.moe/ex_ch2/index.m3u8
 https://mt01.utako.moe/tvo/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="tv_tokyo" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/TV_Tokyo_logo_2023.svg/2560px-TV_Tokyo_logo_2023.svg.png",TV Tokyo
 https://mt01.utako.moe/TV_Tokyo/index.m3u8
+#EXTINF:-1 group-title="JapanTV" tvg-id="tv_tokyo" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/TV_Tokyo_logo_2023.svg/2560px-TV_Tokyo_logo_2023.svg.png",TV Tokyo (Primehome)
+https://epg.freejptv.com/ph.php?&isp=1&id=gd07
 #EXTINF:-1 group-title="JapanTV" tvg-id="v_paradise" tvg-logo="https://www.lyngsat.com/logo/tv/vv/v_paradise_jp.png",V Paradise (NSFW)
 https://ca01.utako.moe/v_paradise/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="wowow_cinema" tvg-logo="https://www.lyngsat.com/logo/tv/ww/wowow_cinema.png",WOWOW Cinema
@@ -14124,6 +14140,68 @@ https://tvpass.org/live/WPIX/sd
 https://tvpass.org/live/yes-network/hd
 #EXTINF:-1  tvg-name="Yes Network SD" tvg-id="yes-network" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/yes-network-us.png?raw=true" group-title="TVPass",Yes Network SD
 https://tvpass.org/live/yes-network/sd
+
+#EXTGRP:TVPass - MLB
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Boston Red Sox @ Toronto Blue Jays (09/25 7:07 Pm Et) Hd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Boston Red Sox @ Toronto Blue Jays (09/25 7:07 Pm Et) Hd
+https://tvpass.org/live/MLB04/hd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Boston Red Sox @ Toronto Blue Jays (09/25 7:07 Pm Et) Sd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Boston Red Sox @ Toronto Blue Jays (09/25 7:07 Pm Et) Sd
+https://tvpass.org/live/MLB04/sd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Chicago White Sox @ New York Yankees (09/25 7:06 Pm Et) Hd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Chicago White Sox @ New York Yankees (09/25 7:06 Pm Et) Hd
+https://tvpass.org/live/MLB29/hd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Chicago White Sox @ New York Yankees (09/25 7:06 Pm Et) Sd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Chicago White Sox @ New York Yankees (09/25 7:06 Pm Et) Sd
+https://tvpass.org/live/MLB29/sd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Colorado Rockies @ Seattle Mariners (09/25 9:41 Pm Et) Hd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Colorado Rockies @ Seattle Mariners (09/25 9:41 Pm Et) Hd
+https://tvpass.org/live/MLB14/hd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Colorado Rockies @ Seattle Mariners (09/25 9:41 Pm Et) Sd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Colorado Rockies @ Seattle Mariners (09/25 9:41 Pm Et) Sd
+https://tvpass.org/live/MLB14/sd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Detroit Tigers @ Cleveland Guardians (09/25 6:41 Pm Et) Hd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Detroit Tigers @ Cleveland Guardians (09/25 6:41 Pm Et) Hd
+https://tvpass.org/live/MLB06/hd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Detroit Tigers @ Cleveland Guardians (09/25 6:41 Pm Et) Sd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Detroit Tigers @ Cleveland Guardians (09/25 6:41 Pm Et) Sd
+https://tvpass.org/live/MLB06/sd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Houston Astros @ Oakland Athletics (09/25 3:36 Pm Et) Hd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Houston Astros @ Oakland Athletics (09/25 3:36 Pm Et) Hd
+https://tvpass.org/live/MLB13/hd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Houston Astros @ Oakland Athletics (09/25 3:36 Pm Et) Sd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Houston Astros @ Oakland Athletics (09/25 3:36 Pm Et) Sd
+https://tvpass.org/live/MLB13/sd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Kansas City Royals @ Los Angeles Angels (09/25 9:39 Pm Et) Hd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Kansas City Royals @ Los Angeles Angels (09/25 9:39 Pm Et) Hd
+https://tvpass.org/live/MLB30/hd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Kansas City Royals @ Los Angeles Angels (09/25 9:39 Pm Et) Sd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Kansas City Royals @ Los Angeles Angels (09/25 9:39 Pm Et) Sd
+https://tvpass.org/live/MLB30/sd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Los Angeles Dodgers @ Arizona Diamondbacks (09/25 3:41 Pm Et) Hd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Los Angeles Dodgers @ Arizona Diamondbacks (09/25 3:41 Pm Et) Hd
+https://tvpass.org/live/MLB21/hd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Los Angeles Dodgers @ Arizona Diamondbacks (09/25 3:41 Pm Et) Sd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Los Angeles Dodgers @ Arizona Diamondbacks (09/25 3:41 Pm Et) Sd
+https://tvpass.org/live/MLB21/sd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Miami Marlins @ Philadelphia Phillies (09/25 6:06 Pm Et) Hd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Miami Marlins @ Philadelphia Phillies (09/25 6:06 Pm Et) Hd
+https://tvpass.org/live/MLB03/hd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Miami Marlins @ Philadelphia Phillies (09/25 6:06 Pm Et) Sd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Miami Marlins @ Philadelphia Phillies (09/25 6:06 Pm Et) Sd
+https://tvpass.org/live/MLB03/sd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Minnesota Twins @ Texas Rangers (09/25 2:36 Pm Et) Hd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Minnesota Twins @ Texas Rangers (09/25 2:36 Pm Et) Hd
+https://tvpass.org/live/MLB28/hd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Minnesota Twins @ Texas Rangers (09/25 2:36 Pm Et) Sd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Minnesota Twins @ Texas Rangers (09/25 2:36 Pm Et) Sd
+https://tvpass.org/live/MLB28/sd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="New York Mets @ Chicago Cubs (09/25 7:41 Pm Et) Hd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",New York Mets @ Chicago Cubs (09/25 7:41 Pm Et) Hd
+https://tvpass.org/live/MLB01/hd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="New York Mets @ Chicago Cubs (09/25 7:41 Pm Et) Sd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",New York Mets @ Chicago Cubs (09/25 7:41 Pm Et) Sd
+https://tvpass.org/live/MLB01/sd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Pittsburgh Pirates @ Cincinnati Reds (09/25 12:41 Pm Et) Hd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Pittsburgh Pirates @ Cincinnati Reds (09/25 12:41 Pm Et) Hd
+https://tvpass.org/live/MLB27/hd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Pittsburgh Pirates @ Cincinnati Reds (09/25 12:41 Pm Et) Sd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Pittsburgh Pirates @ Cincinnati Reds (09/25 12:41 Pm Et) Sd
+https://tvpass.org/live/MLB27/sd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Tampa Bay Rays @ Baltimore Orioles (09/25 1:06 Pm Et) Hd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Tampa Bay Rays @ Baltimore Orioles (09/25 1:06 Pm Et) Hd
+https://tvpass.org/live/MLB26/hd
+#EXTINF:-1 tvg-id="MLB.Baseball.Dummy.us" tvg-name="Tampa Bay Rays @ Baltimore Orioles (09/25 1:06 Pm Et) Sd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/Baseball3.png" group-title="TVPass - MLB",Tampa Bay Rays @ Baltimore Orioles (09/25 1:06 Pm Et) Sd
+https://tvpass.org/live/MLB26/sd
+
+#EXTGRP:TVPass - NCAAF
+#EXTINF:-1 tvg-id="NCAA.Football.Dummy.us" tvg-name="Army Black Knights @ East Carolina Pirates (09/25 7:30 Pm Et) Hd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/CFB2.png" group-title="TVPass - NCAAF",Army Black Knights @ East Carolina Pirates (09/25 7:30 Pm Et) Hd
+https://tvpass.org/live/ESPN/hd
+#EXTINF:-1 tvg-id="NCAA.Football.Dummy.us" tvg-name="Army Black Knights @ East Carolina Pirates (09/25 7:30 Pm Et) Sd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/CFB2.png" group-title="TVPass - NCAAF",Army Black Knights @ East Carolina Pirates (09/25 7:30 Pm Et) Sd
+https://tvpass.org/live/ESPN/sd
+
+#EXTGRP:TVPass - NFL
+#EXTINF:-1 tvg-id="NFL.Dummy.us" tvg-name="Seattle Seahawks @ Arizona Cardinals (09/25 8:16 Pm Et) Hd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/NFL2.png" group-title="TVPass - NFL",Seattle Seahawks @ Arizona Cardinals (09/25 8:16 Pm Et) Hd
+https://tvpass.org/live/tsn1/hd
+#EXTINF:-1 tvg-id="NFL.Dummy.us" tvg-name="Seattle Seahawks @ Arizona Cardinals (09/25 8:16 Pm Et) Sd" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/NFL2.png" group-title="TVPass - NFL",Seattle Seahawks @ Arizona Cardinals (09/25 8:16 Pm Et) Sd
+https://tvpass.org/live/tsn1/sd
 
 #EXTGRP:Xumo Streams
 #EXTINF:-1  tvg-name="25 Words or Less" tvg-id="99991659" tvg-logo="https://image.xumo.com/v1/channels/channel/99991659/168x168.png?type=color_onBlack" group-title="Xumo Streams",25 Words or Less
