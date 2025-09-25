@@ -43,12 +43,12 @@ https://gg.poocloud.in/cubs/index.m3u8
 #EXTVLCOPT:http-origin=https://ppvs.su
 #EXTVLCOPT:http-referrer=https://ppvs.su/
 #EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:142.0) Gecko/20100101 Firefox/142.0
-https://gg.poocloud.in/laliga_c-a-osasuna/index.m3u8
+https://gg.poocloud.in/laliga_c-a-osasuna/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 tvg-id="Soccer.Dummy.us" tvg-logo="https://ppv.to/assets/thumb/d83bb56841a2fb14e242fcce9cc7a0c1-thumbnail.jpg" group-title="PPVLand - Global Football Streams",Real Oviedo vs. FC Barcelona
 #EXTVLCOPT:http-origin=https://ppvs.su
 #EXTVLCOPT:http-referrer=https://ppvs.su/
 #EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:142.0) Gecko/20100101 Firefox/142.0
-https://gg.poocloud.in/laliga_real-oviedo/index.m3u8
+https://gg.poocloud.in/laliga_real-oviedo/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 tvg-id="Soccer.Dummy.us" tvg-logo="https://ppv.to/assets/thumb/7d8375d7de8c4163ce1b68087d8d6403-thumbnail.jpg" group-title="PPVLand - Global Football Streams",Bayern vs. Bremen
 #EXTVLCOPT:http-origin=https://ppvs.su
 #EXTVLCOPT:http-referrer=https://ppvs.su/
@@ -139,6 +139,11 @@ https://gg.poocloud.in/ligue1_toulouse-fc/index.m3u8
 #EXTVLCOPT:http-referrer=https://ppvs.su/
 #EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:142.0) Gecko/20100101 Firefox/142.0
 https://gg.poocloud.in/seriea_cagliari/index.m3u8
+#EXTINF:-1 tvg-id="Soccer.Dummy.us" tvg-logo="https://ppv.to/assets/thumb/e13c77c251cac90bf25f6578dccda2d3-thumbnail.jpg" group-title="PPVLand - Global Football Streams",Tottenham Hotspur vs. Wolverhampton Wanderers
+#EXTVLCOPT:http-origin=https://ppvs.su
+#EXTVLCOPT:http-referrer=https://ppvs.su/
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:142.0) Gecko/20100101 Firefox/142.0
+https://gg.poocloud.in/epl_spurs/index.m3u8
 #EXTINF:-1 tvg-id="Soccer.Dummy.us" tvg-logo="https://ppv.to/assets/thumb/cd381e042243b9342374bbc0941205e7-thumbnail.jpg" group-title="PPVLand - Global Football Streams",PSG vs. AJ Auxerre
 #EXTVLCOPT:http-origin=https://ppvs.su
 #EXTVLCOPT:http-referrer=https://ppvs.su/
@@ -238,7 +243,7 @@ https://gg.poocloud.in/epl_everton/index.m3u8
 #EXTVLCOPT:http-origin=https://ppvs.su
 #EXTVLCOPT:http-referrer=https://ppvs.su/
 #EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:142.0) Gecko/20100101 Firefox/142.0
-https://gg.poocloud.in/southpark/index.m3u8
+https://gg.poocloud.in/southpark/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 tvg-id="PPV.EVENTS.Dummy.us" tvg-logo="http://drewlive24.duckdns.org:9000/Logos/CombatSports2.png" group-title="PPVLand - Combat Sports",Canelo vs Crawford
 #EXTVLCOPT:http-origin=https://ppvs.su
 #EXTVLCOPT:http-referrer=https://ppvs.su/
