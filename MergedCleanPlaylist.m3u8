@@ -3598,6 +3598,8 @@ https://ca01.utako.moe/fighting_tv/index.m3u8
 https://mt01.utako.moe/Fuji_TV/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="fuji_tv" tvg-logo="https://upload.wikimedia.org/wikipedia/fr/thumb/6/65/Fuji_TV_Logo.svg/1049px-Fuji_TV_Logo.svg.png",Fuji TV (Primehome)
 https://epg.freejptv.com/ph.php?&isp=1&id=gd05
+#EXTINF:-1 group-title="JapanTV" tvg-id="fuji_tv" tvg-logo="https://upload.wikimedia.org/wikipedia/fr/thumb/6/65/Fuji_TV_Logo.svg/1049px-Fuji_TV_Logo.svg.png",Fuji TV HD (Primehome)
+https://epg.freejptv.com/ph.php?&isp=1&id=hdgd05
 #EXTINF:-1 group-title="JapanTV" tvg-id="fuji_tv_next" tvg-logo="https://www.lyngsat.com/logo/tv/ff/fuji_tv_next.png",Fuji TV NEXT
 https://ca01.utako.moe/fuji_next/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="fuji_tv_one" tvg-logo="https://www.lyngsat.com/logo/tv/ff/fuji_tv_one.png",Fuji TV ONE
@@ -3640,10 +3642,14 @@ https://mt01.utako.moe/bsp4k/index.m3u8
 https://mt01.utako.moe/NHK_E/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="nhk_e_tokyo" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/a/aa/NHKE%E3%83%86%E3%83%AC%E3%83%AD%E3%82%B42020-.png",NHK E (Primehome)
 https://epg.freejptv.com/ph.php?&isp=1&id=gd02
+#EXTINF:-1 group-title="JapanTV" tvg-id="nhk_e_tokyo" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/a/aa/NHKE%E3%83%86%E3%83%AC%E3%83%AD%E3%82%B42020-.png",NHK E HD (Primehome)
+https://epg.freejptv.com/ph.php?&isp=1&id=hdgd02
 #EXTINF:-1 group-title="JapanTV" tvg-id="nhk_g_tokyo" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/6/6f/NHK%E7%B7%8F%E5%90%88%E3%83%AD%E3%82%B42020-.png",NHK G
 https://mt01.utako.moe/NHK_G/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="nhk_g_tokyo" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/6/6f/NHK%E7%B7%8F%E5%90%88%E3%83%AD%E3%82%B42020-.png",NHK G (Primehome)
 https://epg.freejptv.com/ph.php?&isp=1&id=gd01
+#EXTINF:-1 group-title="JapanTV" tvg-id="nhk_g_tokyo" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/6/6f/NHK%E7%B7%8F%E5%90%88%E3%83%AD%E3%82%B42020-.png",NHK G HD (Primehome)
+https://epg.freejptv.com/ph.php?&isp=1&id=hdgd01
 #EXTINF:-1 group-title="JapanTV" tvg-id="nihon_eiga" tvg-logo="https://www.lyngsat.com/logo/tv/nn/nihon_eiga_senmon.png",Nihon Eiga Senmon
 https://ca01.utako.moe/nihoneiga/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="ntv_g_tasu" tvg-logo="https://www.lyngsat-logo.com/logo/tv/nn/ntv-g-plus-jp.png",Nittele G+
@@ -3652,6 +3658,8 @@ https://ca01.utako.moe/ntvgplus/index.m3u8
 https://mt01.utako.moe/Nippon_TV/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="ntv" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nippon_TV_logo_2014.svg/2560px-Nippon_TV_logo_2014.svg.png",NTV (Primehome)
 https://epg.freejptv.com/ph.php?&isp=1&id=gd03
+#EXTINF:-1 group-title="JapanTV" tvg-id="ntv" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nippon_TV_logo_2014.svg/2560px-Nippon_TV_logo_2014.svg.png",NTV HD (Primehome)
+https://epg.freejptv.com/ph.php?&isp=1&id=hdgd03
 #EXTINF:-1 group-title="JapanTV" tvg-id="sky_a" tvg-logo="https://www.lyngsat.com/logo/tv/ss/sky-a-jp.svg",Sky A
 https://ca01.utako.moe/skya/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="space_shower_tv" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/05/SPACE_SHOWER_TV.jpg",Space Shower TV
@@ -3670,12 +3678,16 @@ https://epg.freejptv.com/ph.php?&isp=1&id=gd04
 https://ca01.utako.moe/tbsch1/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="tbs_channel_2" tvg-logo="https://www.lyngsat.com/logo/tv/tt/tbs-channel-2-jp.png",TBS Channel 2
 https://ca01.utako.moe/tbsch2/index.m3u8
+#EXTINF:-1 group-title="JapanTV" tvg-id="tbs" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Tokyo_Broadcasting_System_logo_2020.svg/2560px-Tokyo_Broadcasting_System_logo_2020.svg.png",TBS HD (Primehome)
+https://epg.freejptv.com/ph.php?&isp=1&id=hdgd04
 #EXTINF:-1 group-title="JapanTV" tvg-id="toei_channel" tvg-logo="https://www.lyngsat.com/logo/tv/tt/toei_channel.png",Toei Channel
 https://ca01.utako.moe/toei/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="tokyo_mx_1" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Tokyo_metropolitan_television_logo_%28rainbow%29.svg/2560px-Tokyo_metropolitan_television_logo_%28rainbow%29.svg.png",TOKYO MX1
 https://mt01.utako.moe/Tokyo_MX1/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="tokyo_mx_1" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Tokyo_metropolitan_television_logo_%28rainbow%29.svg/2560px-Tokyo_metropolitan_television_logo_%28rainbow%29.svg.png",TOKYO MX1 (Primehome)
 https://epg.freejptv.com/ph.php?&isp=1&id=gd08
+#EXTINF:-1 group-title="JapanTV" tvg-id="tokyo_mx_1" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Tokyo_metropolitan_television_logo_%28rainbow%29.svg/2560px-Tokyo_metropolitan_television_logo_%28rainbow%29.svg.png",TOKYO MX1 HD (Primehome)
+https://epg.freejptv.com/ph.php?&isp=1&id=hdgd08
 #EXTINF:-1 group-title="JapanTV" tvg-id="tokyo_mx2" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Tokyo_metropolitan_television_logo_%28rainbow%29.svg/2560px-Tokyo_metropolitan_television_logo_%28rainbow%29.svg.png",TOKYO MX2
 https://mt01.utako.moe/Tokyo_MX2/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="tv_asahi_channel_1" tvg-logo="https://www.lyngsat.com/logo/tv/tt/tv-asahi-channel-1-jp.png",TV Asahi Channel 1
@@ -3688,6 +3700,8 @@ https://mt01.utako.moe/tvo/index.m3u8
 https://mt01.utako.moe/TV_Tokyo/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="tv_tokyo" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/TV_Tokyo_logo_2023.svg/2560px-TV_Tokyo_logo_2023.svg.png",TV Tokyo (Primehome)
 https://epg.freejptv.com/ph.php?&isp=1&id=gd07
+#EXTINF:-1 group-title="JapanTV" tvg-id="tv_tokyo" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/TV_Tokyo_logo_2023.svg/2560px-TV_Tokyo_logo_2023.svg.png",TV Tokyo HD (Primehome)
+https://epg.freejptv.com/ph.php?&isp=1&id=hdgd07
 #EXTINF:-1 group-title="JapanTV" tvg-id="wowow_cinema" tvg-logo="https://www.lyngsat.com/logo/tv/ww/wowow_cinema.png",WOWOW Cinema
 https://mt01.utako.moe/wcinema/index.m3u8
 #EXTINF:-1 group-title="JapanTV" tvg-id="wowow_live" tvg-logo="https://www.lyngsat.com/logo/tv/ww/wowow_live.png",WOWOW Live
