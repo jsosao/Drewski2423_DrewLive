@@ -3,12 +3,7 @@
 #EXTVLCOPT:http-origin=https://ppvs.su
 #EXTVLCOPT:http-referrer=https://ppvs.su/
 #EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:142.0) Gecko/20100101 Firefox/142.0
-https://gg.poocloud.in/dallascowboys/tracks-v1a1/mono.ts.m3u8
-#EXTINF:-1 tvg-id="Basketball.Dummy.us" tvg-logo="https://ppv.to/assets/thumb/3cde5481552b2a027bf2a6657cbcddc3-thumbnail.jpg" group-title="PPVLand - Basketball Hub",Lynx at Mercury (Game 4)
-#EXTVLCOPT:http-origin=https://ppvs.su
-#EXTVLCOPT:http-referrer=https://ppvs.su/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:142.0) Gecko/20100101 Firefox/142.0
-https://gg.poocloud.in/wnba_mercury/tracks-v1a1/mono.ts.m3u8
+https://gg.poocloud.in/dallascowboys/index.m3u8
 #EXTINF:-1 tvg-id="Soccer.Dummy.us" tvg-logo="https://ppv.to/assets/thumb/1bba1382e33a2a34470926a95e5d2203-thumbnail.jpg" group-title="PPVLand - Global Football Streams",Parma vs. Torino
 #EXTVLCOPT:http-origin=https://ppvs.su
 #EXTVLCOPT:http-referrer=https://ppvs.su/
