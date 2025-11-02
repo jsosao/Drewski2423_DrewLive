@@ -1,22 +1,21 @@
-
-import requests
-import sys
+import asyncio
 import re
-import concurrent.futures
-
-FALLBACK_LOGOS = {
-    "american-football": "http://drewlive24.duckdns.org:9000/Logos/Am-Football2.png",
-    "football":          "https://external-content.duckduckgo.com/iu/?u=https://i.imgur.com/RvN0XSF.png",
-    "fight":             "http://drewlive24.duckdns.org:9000/Logos/Combat-Sports.png",
-    "basketball":        "http://drewlive24.duckdns.org:9000/Logos/Basketball5.png",
-    "motor sports":      "http://drewlive24.duckdns.org:9000/Logos/Motorsports3.png",
-    "darts":             "http://drewlive24.duckdns.org:9000/Logos/Darts.png"
-}
+import requests
+from playwright.async_api import async_playwright
 
 CUSTOM_HEADERS = {
     "Origin": "https://embedsports.top",
     "Referer": "https://embedsports.top/",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:143.0) Gecko/20100101 Firefox/143.0"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:141.0) Gecko/20100101 Firefox/141.0"
+}
+
+FALLBACK_LOGOS = {
+    "american-football": "http://drewlive24.duckdns.org:9000/Logos/Am-Football2.png",
+    "football": "https://external-content.duckduckgo.com/iu/?u=https://i.imgur.com/RvN0XSF.png",
+    "fight": "http://drewlive24.duckdns.org:9000/Logos/Combat-Sports.png",
+    "basketball": "http://drewlive24.duckdns.org:9000/Logos/Basketball5.png",
+    "motor sports": "http://drewlive24.duckdns.org:9000/Logos/Motorsports3.png",
+    "darts": "http://drewlive24.duckdns.org:9000/Logos/Darts.png"
 }
 
 TV_IDS = {
@@ -32,153 +31,170 @@ TV_IDS = {
     "Motor Sports": "Racing.Dummy.us"
 }
 
-def get_matches(endpoint="all"):
-    url = f"https://streami.su/api/matches/{endpoint}"
+def get_all_matches():
+    endpoints = ["all", "live", "today", "upcoming"]
+    all_matches = []
+    for ep in endpoints:
+        try:
+            print(f"📡 Fetching matches from endpoint: {ep}")
+            res = requests.get(f"https://streami.su/api/matches/{ep}", timeout=15)
+            res.raise_for_status()
+            data = res.json()
+            print(f"✅ Got {len(data)} matches from {ep}")
+            all_matches.extend(data)
+        except Exception as e:
+            print(f"⚠️ Failed fetching {ep}: {e}")
+    print(f"🎯 Total matches collected: {len(all_matches)}")
+    return all_matches
+
+
+def get_embed_urls_from_api(source):
     try:
-        print(f"📡 Fetching {endpoint} matches from the API...")
-        response = requests.get(url, timeout=20)
-        response.raise_for_status()
-        print(f"✅ Successfully fetched {endpoint} matches.")
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"❌ Error fetching {endpoint} matches: {e}", file=sys.stderr)
+        s_name, s_id = source.get("source"), source.get("id")
+        if not s_name or not s_id:
+            return []
+        api_url = f"https://streami.su/api/stream/{s_name}/{s_id}"
+        res = requests.get(api_url, timeout=10)
+        res.raise_for_status()
+        data = res.json()
+        return [d.get("embedUrl") for d in data if d.get("embedUrl")]
+    except:
         return []
 
-def get_stream_embed_url(source):
-    try:
-        src_name = source.get('source')
-        src_id = source.get('id')
-        if not src_name or not src_id:
-            return None
-        api_url = f"https://streami.su/api/stream/{src_name}/{src_id}"
-        response = requests.get(api_url, timeout=10)
-        response.raise_for_status()
-        streams = response.json()
-        if streams and streams[0].get('embedUrl'):
-            return streams[0]['embedUrl']
-    except:
-        pass
-    return None
 
-def find_m3u8_in_content(page_content):
-    patterns = [
-        r'source:\s*["\'](https?://[^\'"]+\.m3u8?[^\'"]*)["\']',
-        r'file:\s*["\'](https?://[^\'"]+\.m3u8?[^\'"]*)["\']',
-        r'hlsSource\s*=\s*["\'](https?://[^\'"]+\.m3u8?[^\'"]*)["\']',
-        r'src\s*:\s*["\'](https?://[^\'"]+\.m3u8?[^\'"]*)["\']',
-        r'["\'](https?://[^\'"]+\.m3u8?[^\'"]*)["\']'
-    ]
-    for pattern in patterns:
-        match = re.search(pattern, page_content)
-        if match:
-            return match.group(1)
-    return None
-
-def extract_m3u8_from_embed(embed_url):
-    if not embed_url:
-        return None
+async def extract_m3u8(embed_url, timeout=10000):
+    found = None
     try:
-        response = requests.get(embed_url, headers=CUSTOM_HEADERS, timeout=15)
-        response.raise_for_status()
-        return find_m3u8_in_content(response.text)
-    except:
+        async with async_playwright() as p:
+            browser = await p.firefox.launch(headless=True)
+            ctx = await browser.new_context(extra_http_headers=CUSTOM_HEADERS)
+            page = await ctx.new_page()
+
+            async def on_request(request):
+                nonlocal found
+                if ".m3u8" in request.url and not found:
+                    found = request.url
+                    print(f"  ⚡ Found stream → {found}")
+
+            page.on("request", on_request)
+
+            await page.goto(embed_url, wait_until="domcontentloaded", timeout=timeout)
+
+            selectors = [
+                "div.jw-icon-display[role='button']",
+                ".jw-icon-playback",
+                ".vjs-big-play-button",
+                ".plyr__control",
+                "div[class*='play']",
+                "div[role='button']",
+                "button",
+                "canvas"
+            ]
+
+            for _ in range(3):
+                for sel in selectors:
+                    try:
+                        el = await page.query_selector(sel)
+                        if el:
+                            await el.click(timeout=500)
+                            break
+                    except:
+                        continue
+                if found:
+                    break
+                await asyncio.sleep(0.25)
+
+            for _ in range(3):
+                if found:
+                    break
+                await asyncio.sleep(0.5)
+
+            if not found:
+                html = await page.content()
+                matches = re.findall(r'https?://[^\s"\'<>]+\.m3u8(?:\?[^"\'<>]*)?', html)
+                if matches:
+                    found = matches[0]
+                    print(f"  🕵️ Fallback found → {found}")
+
+            await browser.close()
+            return found
+    except Exception as e:
+        print(f"⚠️ {embed_url} failed: {e}")
         return None
+
 
 def validate_logo(url, category):
-    """Check logo URL; fallback strictly based on category."""
-    cat = (category or "").lower().replace('-', ' ').strip()
-    category_key = next((key for key in FALLBACK_LOGOS if key.lower() == cat), None)
-    fallback = FALLBACK_LOGOS.get(category_key)
-
+    cat = (category or "").lower().replace("-", " ").strip()
+    fallback = FALLBACK_LOGOS.get(cat)
     if url:
         try:
-            resp = requests.head(url, timeout=5, allow_redirects=True)
-            if resp.status_code in (200, 302):
+            res = requests.head(url, timeout=5)
+            if res.status_code in (200, 302):
                 return url
-            else:
-                print(f"⚠️ Logo {resp.status_code}: {url} → using fallback for {category}")
-        except requests.RequestException:
-            print(f"⚠️ Logo failed: {url} → using fallback for {category}")
-
+        except:
+            pass
     return fallback
 
+
 def build_logo_url(match):
-    api_category = (match.get('category') or '').strip()
-    logo_url = None
-
-    teams = match.get('teams') or {}
-    for side in ['away', 'home']:
-        team = teams.get(side, {})
-        badge = team.get('badge') or team.get('id')
+    cat = (match.get("category") or "").strip()
+    teams = match.get("teams") or {}
+    for side in ["away", "home"]:
+        badge = teams.get(side, {}).get("badge")
         if badge:
-            logo_url = f"https://streamed.pk/api/images/badge/{badge}.webp"
-            break
+            url = f"https://streamed.pk/api/images/badge/{badge}.webp"
+            return validate_logo(url, cat), cat
+    if match.get("poster"):
+        url = f"https://streamed.pk/api/images/proxy/{match['poster']}.webp"
+        return validate_logo(url, cat), cat
+    return validate_logo(None, cat), cat
 
-    if not logo_url and match.get('poster'):
-        poster = match['poster']
-        logo_url = f"https://streamed.pk/api/images/proxy/{poster}.webp"
 
-    if logo_url:
-        logo_url = re.sub(r'(https://streamed\.pk/api/images/proxy/)+', 'https://streamed.pk/api/images/proxy/', logo_url)
-        logo_url = re.sub(r'\.webp\.webp$', '.webp', logo_url)
-
-    logo_url = validate_logo(logo_url, api_category)
-    return logo_url, api_category
-
-def process_match(match):
-    title = match.get('title', 'Untitled Match')
-    sources = match.get('sources', [])
-    for source in sources:
-        embed_url = get_stream_embed_url(source)
-        if embed_url:
-            print(f"  🔎 Checking '{title}': {embed_url}")
-            m3u8 = extract_m3u8_from_embed(embed_url)
+async def process_match(match):
+    title = match.get("title", "Unknown Match")
+    sources = match.get("sources", [])
+    for s in sources:
+        embed_urls = get_embed_urls_from_api(s)
+        for embed in embed_urls:
+            print(f"\n  🔎 Checking '{title}': {embed}")
+            m3u8 = await extract_m3u8(embed)
             if m3u8:
+                print(f"  ✅ Found stream for {title}: {m3u8}")
                 return match, m3u8
     return match, None
 
-def generate_m3u8():
-    all_matches = get_matches("all")
-    live_matches = get_matches("live")
-    matches = all_matches + live_matches
 
+async def generate_playlist():
+    matches = get_all_matches()
     if not matches:
-        return "#EXTM3U\n#EXTINF:-1,No Matches Found\n"
+        print("❌ No matches found.")
+        return "#EXTM3U\n"
 
     content = ["#EXTM3U"]
     success = 0
 
-    vlc_header_lines = [
-        f'#EXTVLCOPT:http-origin={CUSTOM_HEADERS["Origin"]}',
-        f'#EXTVLCOPT:http-referrer={CUSTOM_HEADERS["Referer"]}',
-        f'#EXTVLCOPT:user-agent={CUSTOM_HEADERS["User-Agent"]}'
-    ]
+    for match in matches:
+        match, url = await process_match(match)
+        if not url:
+            continue
+        logo, cat = build_logo_url(match)
+        title = match.get("title", "Untitled")
+        display_cat = cat.replace("-", " ").title() if cat else "General"
+        tv_id = TV_IDS.get(display_cat, "General.Dummy.us")
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-        futures = {executor.submit(process_match, m): m for m in matches}
-        for future in concurrent.futures.as_completed(futures):
-            match, url = future.result()
-            title = match.get('title', 'Untitled Match')
-            if url:
-                logo, cat = build_logo_url(match)
-                display_cat = cat.replace('-', ' ').title() if cat else "General"
-                tv_id = TV_IDS.get(display_cat, "General.Dummy.us")
+        content.append(f'#EXTINF:-1 tvg-id="{tv_id}" tvg-name="{title}" tvg-logo="{logo}" group-title="StreamedSU - {display_cat}",{title}')
+        content.append(f'#EXTVLCOPT:http-origin={CUSTOM_HEADERS["Origin"]}')
+        content.append(f'#EXTVLCOPT:http-referrer={CUSTOM_HEADERS["Referer"]}')
+        content.append(f'#EXTVLCOPT:user-agent={CUSTOM_HEADERS["User-Agent"]}')
+        content.append(url)
+        success += 1
 
-                content.append(f'#EXTINF:-1 tvg-id="{tv_id}" tvg-name="{title}" tvg-logo="{logo}" group-title="StreamedSU - {display_cat}",{title}')
-                content.extend(vlc_header_lines)
-                content.append(url)
-                success += 1
-                print(f"  ✅ {title} ({logo}) TV-ID: {tv_id}")
-
-    print(f"🎉 Found {success} working streams.")
+    print(f"🎉 {success} working streams found.")
     return "\n".join(content)
 
+
 if __name__ == "__main__":
-    playlist = generate_m3u8()
-    try:
-        with open("StreamedSU.m3u8", "w", encoding="utf-8") as f:
-            f.write(playlist)
-        print("💾 Playlist saved successfully.")
-    except IOError as e:
-        print(f"⚠️ Error saving file: {e}")
-        print(playlist)
+    playlist = asyncio.run(generate_playlist())
+    with open("StreamedSU.m3u8", "w", encoding="utf-8") as f:
+        f.write(playlist)
+    print("💾 Saved as StreamedSU.m3u8")
