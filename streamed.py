@@ -33,7 +33,7 @@ TV_IDS = {
 }
 
 def get_matches(endpoint="all"):
-    url = f"https://streamed.pk/api/matches/{endpoint}"
+    url = f"https://streami.su/api/matches/{endpoint}"
     try:
         print(f"📡 Fetching {endpoint} matches from the API...")
         response = requests.get(url, timeout=20)
@@ -50,7 +50,7 @@ def get_stream_embed_url(source):
         src_id = source.get('id')
         if not src_name or not src_id:
             return None
-        api_url = f"https://streamed.pk/api/stream/{src_name}/{src_id}"
+        api_url = f"https://streami.su/api/stream/{src_name}/{src_id}"
         response = requests.get(api_url, timeout=10)
         response.raise_for_status()
         streams = response.json()
