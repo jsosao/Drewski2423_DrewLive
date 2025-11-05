@@ -15,13 +15,13 @@ Simplify your setup with every playlist in one place.
 **🔥 DREWLIVE XTREAM PLAYLIST 🔥**
 
 A brand new **Xtream playlist** packed with content!  
-Enjoy **general live TV**, occasional **live sports**, and an enormous library of **12,000+ movies** and **5,700+ series**.  
+Enjoy **general live TV**, occasional **live sports**, and an enormous library of **70,000+ movies** and **8,000+ series**.  
 
 **Included Content:**  
 * 🖥️ General Live TV  
 * ⚽ Occasional Live Sports Events  
-* 🎞️ 12K+ Movies  
-* 📺 5.7K+ Series  
+* 🎞️ 70k+ Movies  
+* 📺 8k+ Series  
 
 **Access Info:**  
 * **Username:** `DrewLive24`  
