@@ -1,47 +1,49 @@
-name: 🔁 Update FSTV Playlist 📺
+name: 🔄 Generate FSTV Playlist 🎯
 
 on:
   schedule:
-    - cron: '0 * * * *'  
-  workflow_dispatch:
+    - cron: '*/30 * * * *' 
+  workflow_dispatch:   
 
 permissions:
-  contents: write
+  contents: write 
 
 jobs:
   scrape:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  
 
     steps:
       - name: 📥 Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  
 
       - name: 🐍 Set up Python 3.11
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: 📦 Install Python dependencies & Playwright
+      - name: 📦 Install Playwright & dependencies
         run: |
           python -m pip install --upgrade pip
           pip install playwright urllib3 aiohttp
           playwright install firefox
           playwright install-deps
 
-      - name: 🎯 Run scraping script
+      - name: 🎯 Run FSTV scraping script
         run: python fstv.py
 
-      - name: 💾 Commit & Safely Push if Playlist Changed
+      - name: 💾 Commit & safely push if playlist changed
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+          # Stage the output playlist
           git add FSTV24.m3u8
 
+          # Skip commit if no diff
           if git diff --cached --quiet; then
             echo "✅ No changes to commit"
             exit 0
@@ -49,12 +51,14 @@ jobs:
 
           git commit -m "🔁 Update FSTV playlist $(date -u +'%a %b %d %T UTC %Y')"
 
+          # Random short delay to reduce collision risk
           sleep $((RANDOM % 10 + 5))
 
+          # Safe push with fallback merge
           if ! git push origin main; then
-            echo "⚠️ Push rejected. Trying safe fetch + merge..."
+            echo "⚠️ Push rejected. Attempting safe rebase..."
             git pull origin main --rebase || {
-              echo "❌ Rebase failed. Exiting to avoid corruption."
+              echo "❌ Rebase failed. Stopping to prevent corruption."
               exit 1
             }
             git push origin main || {
