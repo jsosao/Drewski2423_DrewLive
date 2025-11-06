@@ -121,8 +121,10 @@ https://fl1.moveonjoy.com/DISNEY_XD/index.m3u8
 https://fl1.moveonjoy.com/DIY/index.m3u8
 #EXTINF:-1  tvg-name="E! East" tvg-id="E!.Entertainment.Television.HD.us2" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/e-entertainment-us.png?raw=true" group-title="MoveOnJoy" radio="false",E! East
 https://fl1.moveonjoy.com/E_ENTERTAINMENT_TELEVISION/index.m3u8
+#EXTINF:-1  tvg-name="ESPN" tvg-id="ESPN.HD.us2" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/espn-icon-us.png?raw=true" group-title="MoveOnJoy" radio="false",ESPN
+https://fl2.moveonjoy.com/ESPN/index.m3u8
 #EXTINF:-1  tvg-name="ESPN 2" tvg-id="ESPN2.HD.us2" tvg-logo="http://schedulesdirect-api20141201-logos.s3.dualstack.us-east-1.amazonaws.com/stationLogos/s12444_dark_360w_270h.png" group-title="MoveOnJoy" radio="false",ESPN 2
-https://fl1.moveonjoy.com/ESPN_2/index.m3u8
+https://fl2.moveonjoy.com/ESPN_2/index.m3u8
 #EXTINF:-1  tvg-name="ESPN NEWS" tvg-id="ESPNEWS.HD.us2" tvg-logo="http://schedulesdirect-api20141201-logos.s3.dualstack.us-east-1.amazonaws.com/stationLogos/s16485_dark_360w_270h.png" group-title="MoveOnJoy" radio="false",ESPN NEWS
 https://fl1.moveonjoy.com/ESPN_NEWS/index.m3u8
 #EXTINF:-1  tvg-name="ESPN U" tvg-id="ESPNU.HD.us2" tvg-logo="http://schedulesdirect-api20141201-logos.s3.dualstack.us-east-1.amazonaws.com/stationLogos/s45654_dark_360w_270h.png" group-title="MoveOnJoy" radio="false",ESPN U
