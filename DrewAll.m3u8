@@ -95,7 +95,7 @@ https://mthrbord.tv/hls/0/stream.m3u8
 https://theupperleft.thesprawl.online/hls/0/stream.m3u8?cachebust=2f690bd7
 #EXTINF:-1  tvg-name="Toonami Aftermath East" tvg-id="24.7.Dummy.us" tvg-logo="https://raw.githubusercontent.com/kbmystery7/TAM3U8/main/ta%20wall%20thumb%20east.jpg" group-title="DrewLive Fan Made TV" radio="false",Toonami Aftermath East
 http://api.toonamiaftermath.com:3000/est/playlist.m3u8
-#EXTINF:-1  tvg-logo="https://raw.githubusercontent.com/kbmystery7/TAM3U8/main/ta%20wall%20thumb%20radio.jpg" group-title="DrewLive Fan Made TV" radio="false",Toonami Aftermath Radio
+#EXTINF:-1  tvg-id="24.7.Dummy.us" tvg-logo="https://raw.githubusercontent.com/kbmystery7/TAM3U8/main/ta%20wall%20thumb%20radio.jpg" group-title="DrewLive Fan Made TV" radio="false",Toonami Aftermath Radio
 http://api.toonamiaftermath.com:3000/radio/playlist.m3u8
 #EXTINF:-1  tvg-name="Toonami Aftermath Movies" tvg-id="24.7.Dummy.us" tvg-logo="https://raw.githubusercontent.com/kbmystery7/TAM3U8/main/ta%20wall%20thumb%20movies.jpg" group-title="DrewLive Fan Made TV" radio="false",Toonami Aftermath Movies
 http://api.toonamiaftermath.com:3000/movies/playlist.m3u8
