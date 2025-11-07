@@ -76,7 +76,7 @@ def get_embed_urls_from_api(source):
         s_name, s_id = source.get("source"), source.get("id")
         if not s_name or not s_id:
             return []
-        res = requests.get(f"https://streami.su/api/stream/{s_name}/{s_id}", timeout=6)
+        res = requests.get(f"https://streamed.pk/api/stream/{s_name}/{s_id}", timeout=6)
         res.raise_for_status()
         data = res.json()
         return [d.get("embedUrl") for d in data if d.get("embedUrl")]
