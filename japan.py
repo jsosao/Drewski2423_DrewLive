@@ -1,7 +1,7 @@
 import requests
 import re
 
-UPSTREAM_URL = "https://gitea.com/luongz/utako/raw/branch/main/jp.m3u"
+UPSTREAM_URL = "https://web.utako.moe/jp.m3u"
 OUTPUT_FILE = "JapanTV.m3u8"
 FORCED_GROUP_NAME = "JapanTV"
 TVG_HEADER = '#EXTM3U url-tvg="https://epg.freejptv.com/jp.xml,https://animenosekai.github.io/japanterebi-xmltv/guide.xml" tvg-shift=0'
