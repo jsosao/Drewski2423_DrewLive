@@ -2,39 +2,39 @@ name: 🔄 Generate StreamedSU Playlist ⚡
 
 on:
   schedule:
-    - cron: '0 * * * *' # ⏰ Runs every hour on the hour
-  workflow_dispatch: # 🟢 Allows manual runs from the GitHub UI
+    - cron: '0 * * * *'
+  workflow_dispatch:
 
 permissions:
-  contents: write # ✍️ Grants permission to write to the repository
+  contents: write
 
 jobs:
   scrape:
-    runs-on: ubuntu-latest # 🐧 Uses a clean Ubuntu environment
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetches full history for proper git checks
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11' # 🐍 Matches your local Python target
+          python-version: '3.11'
 
-      - name: Install dependencies & Playwright
+      - name: Install dependencies & Playwright (Chrome Beta)
         run: |
           python -m pip install --upgrade pip
           pip install playwright requests
-          playwright install firefox        # 🌐 Install the Firefox browser for Playwright
-          playwright install-deps           # 🔧 System deps for headless browser
+          playwright install chromium
+          playwright install-deps
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-beta
 
       - name: Run StreamedSU Scraper
         run: |
-          echo "🚀 Starting StreamedSU scrape..."
           python streamed.py
-          echo "✅ Scrape complete, output saved to StreamedSU.m3u8"
 
       - name: Commit and Push updated playlist
         run: |
