@@ -1,7 +1,8 @@
 import asyncio
-from playwright.async_api import async_playwright
+from playwright.async_api import async_playwright, TimeoutError as PlaywrightTimeoutError
 import aiohttp
 from datetime import datetime
+import re 
 
 API_URL = "https://ppv.to/api/streams"
 
@@ -91,9 +92,13 @@ COLLEGE_TEAMS = {
     "arizona state sun devils", "texas tech red raiders", "florida atlantic owls"
 }
 
-# --- CORRECTED FUNCTION #1 ---
 async def check_m3u8_url(url, referer):
     """Checks the M3U8 URL using the correct referer for validation."""
+    
+    # --- FIX: Mark gg.poocloud.in URLs as always valid ---
+    if "gg.poocloud.in" in url:
+        return True
+
     try:
         # Dynamically generate the origin from the referer URL
         origin = "https://" + referer.split('/')[2]
@@ -131,9 +136,10 @@ async def get_streams():
         print(f"❌ Error in get_streams: {str(e)}")
         return None
 
-# --- CORRECTED FUNCTION #2 ---
 async def grab_m3u8_from_iframe(page, iframe_url):
     found_streams = set()
+    
+    # 1. Network Listener
     def handle_response(response):
         if ".m3u8" in response.url:
             print(f"✅ Found M3U8 Stream: {response.url}")
@@ -142,34 +148,54 @@ async def grab_m3u8_from_iframe(page, iframe_url):
     page.on("response", handle_response)
     print(f"🌐 Navigating to iframe: {iframe_url}")
     try:
-        await page.goto(iframe_url, timeout=30000, wait_until="domcontentloaded")
+        await page.goto(iframe_url, timeout=40000, wait_until="domcontentloaded") 
     except Exception as e:
         print(f"❌ Failed to load iframe page: {e}")
         page.remove_listener("response", handle_response)
         return set()
 
+    # 2. Clicking Logic (FIXED FOR VIEWPORT ERROR)
     try:
-        await page.wait_for_timeout(5000)
+        await page.wait_for_timeout(3000) # Wait a little for player to load
         nested_iframe = page.locator("iframe")
+        
         if await nested_iframe.count() > 0:
             print("🔎 Found nested iframe, attempting to click inside it.")
-            player_frame = page.frame_locator("iframe").first
-            # Use force=True to click even if the element is not "visible"
-            await player_frame.locator("body").click(timeout=5000, force=True)
+            # Use mouse click on page coordinates to trigger playback in nested iframe
+            await page.mouse.click(200, 200) 
+            print("✅ Mouse click dispatched on page center to trigger nested player.")
+            
         else:
-            print("🖱️ No nested iframe found. Clicking main page body.")
-            await page.locator("body").click(timeout=5000, force=True)
+            print("🖱️ No nested iframe found. Clicking center of page body.")
+            # Use page.mouse.click(200, 200) to avoid viewport issues
+            await page.mouse.click(200, 200)
+            
     except Exception as e:
         print(f"⚠️ Clicking failed, but proceeding anyway. Error: {e}")
 
-    print("⏳ Waiting 8s for stream to be requested...")
-    await asyncio.sleep(8)
+    # 3. Dynamic Wait (FIXED: Removed 2-second sleep)
+    print("⏳ Waiting for stream to be requested (max 10s)...")
+    try:
+        # Dynamically wait for the first M3U8 response to be captured by the listener
+        await page.wait_for_event(
+            "response",
+            lambda resp: ".m3u8" in resp.url,
+            timeout=10000 
+        )
+        print("✅ M3U8 stream detected. Proceeding immediately to validation.")
+
+    except PlaywrightTimeoutError:
+        print("⚠️ Stream request did not start within 10 seconds. Proceeding to validation.")
+    except Exception as e:
+        print(f"❌ Failed during wait for M3U8 event: {e}")
+
     page.remove_listener("response", handle_response)
 
     if not found_streams:
         print(f"❌ No M3U8 URLs were captured for {iframe_url}")
         return set()
 
+    # 4. Validation 
     valid_urls = set()
     # Pass the correct iframe_url as the referer to the check function
     tasks = [check_m3u8_url(url, iframe_url) for url in found_streams]
