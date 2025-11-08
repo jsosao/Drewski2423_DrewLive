@@ -44,6 +44,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main
           git add StreamedSU.m3u8
           git commit -m "🧩 Update StreamedSU Playlist ⚡ $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
           git push
