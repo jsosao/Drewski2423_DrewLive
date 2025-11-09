@@ -35,7 +35,7 @@ FALLBACK_LOGOS = {
     "rugby": "http://drewlive24.duckdns.org:9000/Logos/Rugby.png",
     "cricket": "http://drewlive24.duckdns.org:9000/Logos/Cricket.png",
     "golf": "http://drewlive24.duckdns.org:9000/Logos/Golf.png",
-    "other" "http://drewlive24.duckdns.org:9000/Logos/DrewLiveSports.png"
+    "other": "http://drewlive24.duckdns.org:9000/Logos/DrewLiveSports.png"
 
 }
 
