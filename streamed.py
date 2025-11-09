@@ -160,8 +160,8 @@ async def extract_m3u8(page, embed_url):
         return None
 
 def validate_logo(url, category):
-    cat = (category or "").lower().replace("-", " ").strip()
-    fallback = FALLBACK_LOGOS.get(cat)
+    cat = (category or "other").lower().replace("-", " ").strip()
+    fallback = FALLBACK_LOGOS.get(cat, FALLBACK_LOGOS["other"])
     if url:
         try:
             res = requests.head(url, timeout=2)
@@ -172,7 +172,7 @@ def validate_logo(url, category):
     return fallback
 
 def build_logo_url(match):
-    cat = (match.get("category") or "").strip()
+    cat = (match.get("category") or "other").strip()
     teams = match.get("teams") or {}
     for side in ["away", "home"]:
         badge = teams.get(side, {}).get("badge")
@@ -237,7 +237,7 @@ async def generate_playlist():
             title = match.get("title", "Untitled")
             content.append(
                 f'#EXTINF:-1 tvg-id="{tv_id}" tvg-name="{title}" '
-                f'tvg-logo="{logo}" group-title="StreamedSU - {display_cat}",{title}'
+                f'tvg-logo="{logo or FALLBACK_LOGOS["other"]}" group-title="StreamedSU - {display_cat}",{title}'
             )
             content.append(f'#EXTVLCOPT:http-origin={CUSTOM_HEADERS["Origin"]}')
             content.append(f'#EXTVLCOPT:http-referrer={CUSTOM_HEADERS["Referer"]}')
