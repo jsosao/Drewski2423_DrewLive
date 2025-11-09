@@ -2,7 +2,7 @@ name: 🔄 Generate StreamedSU Playlist ⚡
 
 on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 * * * *' 
   workflow_dispatch:
 
 permissions:
@@ -14,12 +14,12 @@ jobs:
 
     steps:
       - name: 📥 Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: 🐍 Set up Python 3.11
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
@@ -29,12 +29,6 @@ jobs:
           pip install playwright requests
           python -m playwright install chromium
           python -m playwright install-deps
-          sudo apt-get update
-          sudo apt-get install -y wget gnupg
-          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-linux-signing-keyring.gpg
-          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux-signing-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-beta
 
       - name: 🎯 Run scraping script
         run: python streamed.py
@@ -45,8 +39,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Stage the output file
           git add StreamedSU.m3u8
 
+          # Check if there are any changes
           if git diff --cached --quiet; then
             echo "✅ No changes to commit"
             exit 0
@@ -54,12 +51,14 @@ jobs:
 
           git commit -m "🧩 Update StreamedSU Playlist ⚡ $(date -u +'%a %b %d %T UTC %Y')"
 
+          # Small random delay to avoid push collisions
           sleep $((RANDOM % 10 + 5))
 
+          # Safe push with fallback rebase
           if ! git push origin main; then
-            echo "⚠️ Push rejected. Trying safe fetch + rebase..."
+            echo "⚠️ Push rejected. Trying safe fetch + merge..."
             git pull origin main --rebase || {
-              echo "❌ Rebase failed. Exiting safely."
+              echo "❌ Rebase failed. Exiting to avoid corruption."
               exit 1
             }
             git push origin main || {
