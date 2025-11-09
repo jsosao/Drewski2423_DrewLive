@@ -32,7 +32,11 @@ FALLBACK_LOGOS = {
     "motor sports": "http://drewlive24.duckdns.org:9000/Logos/Motorsports3.png",
     "darts": "http://drewlive24.duckdns.org:9000/Logos/Darts.png",
     "tennis": "http://drewlive24.duckdns.org:9000/Logos/Tennis-2.png",
-    "rugby": "http://drewlive24.duckdns.org:9000/Logos/Rugby.png"
+    "rugby": "http://drewlive24.duckdns.org:9000/Logos/Rugby.png",
+    "cricket": "http://drewlive24.duckdns.org:9000/Logos/Cricket.png",
+    "golf": "http://drewlive24.duckdns.org:9000/Logos/Golf.png",
+    "other" "http://drewlive24.duckdns.org:9000/Logos/DrewLiveSports.png"
+
 }
 
 TV_IDS = {
@@ -46,7 +50,9 @@ TV_IDS = {
     "Tennis": "Tennis.Dummy.us",
     "Darts": "Darts.Dummy.us",
     "Motor Sports": "Racing.Dummy.us",
-    "Rugby": "Rugby.Dummy.us"
+    "Rugby": "Rugby.Dummy.us",
+    "cricket": "Cricket.Dummy.us",
+    "other": "Sports.Dummy.us"
 }
 
 total_matches = 0
