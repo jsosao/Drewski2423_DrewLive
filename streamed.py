@@ -58,6 +58,14 @@ total_embeds = 0
 total_streams = 0
 total_failures = 0
 
+
+def strip_non_ascii(text: str) -> str:
+    """Remove emojis and non-ASCII characters."""
+    if not text:
+        return ""
+    return re.sub(r"[^\x00-\x7F]+", "", text)
+
+
 def get_all_matches():
     endpoints = ["live"]
     all_matches = []
@@ -74,6 +82,7 @@ def get_all_matches():
     log.info(f"🎯 Total matches collected: {len(all_matches)}")
     return all_matches
 
+
 def get_embed_urls_from_api(source):
     try:
         s_name, s_id = source.get("source"), source.get("id")
@@ -85,6 +94,7 @@ def get_embed_urls_from_api(source):
         return [d.get("embedUrl") for d in data if d.get("embedUrl")]
     except Exception:
         return []
+
 
 async def extract_m3u8(page, embed_url):
     global total_failures
@@ -119,6 +129,7 @@ async def extract_m3u8(page, embed_url):
                     break
             except:
                 continue
+
         try:
             await page.mouse.click(200, 200)
             log.info("  👆 First click triggered ad")
@@ -143,21 +154,25 @@ async def extract_m3u8(page, embed_url):
             log.info("  ▶️ Second click started player")
         except Exception as e:
             log.warning(f"⚠️ Momentum click sequence failed: {e}")
+
         for _ in range(4):
             if found:
                 break
             await asyncio.sleep(0.25)
+
         if not found:
             html = await page.content()
             matches = re.findall(r'https?://[^\s\"\'<>]+\.m3u8(?:\?[^\"\'<>]*)?', html)
             if matches:
                 found = matches[0]
                 log.info(f"  🕵️ Fallback: {found}")
+
         return found
     except Exception as e:
         total_failures += 1
         log.warning(f"⚠️ {embed_url} failed: {e}")
         return None
+
 
 def validate_logo(url, category):
     cat = (category or "other").lower().replace("-", " ").strip()
@@ -170,6 +185,7 @@ def validate_logo(url, category):
         except Exception:
             pass
     return fallback
+
 
 def build_logo_url(match):
     cat = (match.get("category") or "other").strip()
@@ -184,9 +200,10 @@ def build_logo_url(match):
         return validate_logo(url, cat), cat
     return validate_logo(None, cat), cat
 
+
 async def process_match(index, match, total, ctx):
     global total_embeds, total_streams
-    title = match.get("title", "Unknown Match")
+    title = strip_non_ascii(match.get("title", "Unknown Match"))
     log.info(f"\n🎯 [{index}/{total}] {title}")
     sources = match.get("sources", [])
     match_embeds = 0
@@ -210,6 +227,7 @@ async def process_match(index, match, total, ctx):
     log.info(f"     ❌ No working streams ({match_embeds} embeds)")
     return match, None
 
+
 async def generate_playlist():
     global total_matches
     matches = get_all_matches()
@@ -217,24 +235,29 @@ async def generate_playlist():
     if not matches:
         log.warning("❌ No matches found.")
         return "#EXTM3U\n"
+
     content = ["#EXTM3U"]
     success = 0
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True, channel="chrome-beta")
         ctx = await browser.new_context(extra_http_headers=CUSTOM_HEADERS)
         sem = asyncio.Semaphore(2)
+
         async def worker(idx, m):
             async with sem:
                 return await process_match(idx, m, total_matches, ctx)
+
         for i, m in enumerate(matches, 1):
             match, url = await worker(i, m)
             if not url:
                 continue
+
             logo, raw_cat = build_logo_url(match)
             base_cat = (raw_cat or "other").strip().replace("-", " ").lower()
-            display_cat = base_cat.title()
+            display_cat = strip_non_ascii(base_cat.title())
             tv_id = TV_IDS.get(base_cat, TV_IDS["other"])
-            title = match.get("title", "Untitled")
+            title = strip_non_ascii(match.get("title", "Untitled"))
+
             content.append(
                 f'#EXTINF:-1 tvg-id="{tv_id}" tvg-name="{title}" '
                 f'tvg-logo="{logo or FALLBACK_LOGOS["other"]}" group-title="StreamedSU - {display_cat}",{title}'
@@ -244,9 +267,12 @@ async def generate_playlist():
             content.append(f'#EXTVLCOPT:user-agent={CUSTOM_HEADERS["User-Agent"]}')
             content.append(url)
             success += 1
+
         await browser.close()
+
     log.info(f"\n🎉 {success} working streams written to playlist.")
     return "\n".join(content)
+
 
 if __name__ == "__main__":
     start = datetime.now()
