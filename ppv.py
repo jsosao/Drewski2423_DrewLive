@@ -14,7 +14,8 @@ CUSTOM_HEADERS = [
 
 ALLOWED_CATEGORIES = {
     "24/7 Streams", "Wrestling", "Football", "Basketball", "Baseball",
-    "Combat Sports", "American Football", "Darts", "Motorsports", "Ice Hockey"
+    "Combat Sports", "American Football", "Darts", "Motorsports", "Ice Hockey",
+    "Miscellaneous"
 }
 
 CATEGORY_LOGOS = {
@@ -28,7 +29,8 @@ CATEGORY_LOGOS = {
     "Darts": "http://drewlive24.duckdns.org:9000/Logos/Darts.png",
     "Motorsports": "http://drewlive24.duckdns.org:9000/Logos/Motorsports2.png",
     "Live Now": "http://drewlive24.duckdns.org:9000/Logos/DrewLiveSports.png",
-    "Ice Hockey": "http://drewlive24.duckdns.org:9000/Logos/Hockey.png"
+    "Ice Hockey": "http://drewlive24.duckdns.org:9000/Logos/Hockey.png",
+    "Miscellaneous": "http://drewlive24.duckdns.org:9000/Logos/DrewLiveSports.png"
 }
 
 CATEGORY_TVG_IDS = {
@@ -42,7 +44,8 @@ CATEGORY_TVG_IDS = {
     "Darts": "Darts.Dummy.us",
     "Motorsports": "Racing.Dummy.us",
     "Live Now": "24.7.Dummy.us",
-    "Ice Hockey": "NHL.Hockey.Dummy.us"
+    "Ice Hockey": "NHL.Hockey.Dummy.us",
+    "Miscellaneous": "24.7.Dummy.us"
 }
 
 GROUP_RENAME_MAP = {
@@ -56,7 +59,8 @@ GROUP_RENAME_MAP = {
     "Darts": "PPVLand - Darts",
     "Motorsports": "PPVLand - Racing Action",
     "Live Now": "PPVLand - Live Now",
-    "Ice Hockey": "PPVLand - NHL Action"
+    "Ice Hockey": "PPVLand - NHL Action",
+    "Miscellaneous": "PPVLand - Random Events"
 }
 
 NFL_TEAMS = {
@@ -95,12 +99,10 @@ COLLEGE_TEAMS = {
 async def check_m3u8_url(url, referer):
     """Checks the M3U8 URL using the correct referer for validation."""
     
-    # --- FIX: Mark gg.poocloud.in URLs as always valid ---
     if "gg.poocloud.in" in url:
         return True
 
     try:
-        # Dynamically generate the origin from the referer URL
         origin = "https://" + referer.split('/')[2]
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:143.0) Gecko/20100101 Firefox/143.0",
@@ -110,8 +112,6 @@ async def check_m3u8_url(url, referer):
         timeout = aiohttp.ClientTimeout(total=15)
         async with aiohttp.ClientSession(timeout=timeout) as session:
             async with session.get(url, headers=headers) as resp:
-                # A 200 (OK) or 403 (Forbidden) can both indicate a working link,
-                # as some servers block direct file access but confirm the path exists.
                 return resp.status in [200, 403]
     except Exception as e:
         print(f"❌ Error checking {url}: {e}")
@@ -139,7 +139,6 @@ async def get_streams():
 async def grab_m3u8_from_iframe(page, iframe_url):
     found_streams = set()
     
-    # 1. Network Listener
     def handle_response(response):
         if ".m3u8" in response.url:
             print(f"✅ Found M3U8 Stream: {response.url}")
@@ -154,29 +153,24 @@ async def grab_m3u8_from_iframe(page, iframe_url):
         page.remove_listener("response", handle_response)
         return set()
 
-    # 2. Clicking Logic (FIXED FOR VIEWPORT ERROR)
     try:
-        await page.wait_for_timeout(3000) # Wait a little for player to load
+        await page.wait_for_timeout(3000)
         nested_iframe = page.locator("iframe")
         
         if await nested_iframe.count() > 0:
             print("🔎 Found nested iframe, attempting to click inside it.")
-            # Use mouse click on page coordinates to trigger playback in nested iframe
             await page.mouse.click(200, 200) 
             print("✅ Mouse click dispatched on page center to trigger nested player.")
             
         else:
             print("🖱️ No nested iframe found. Clicking center of page body.")
-            # Use page.mouse.click(200, 200) to avoid viewport issues
             await page.mouse.click(200, 200)
             
     except Exception as e:
         print(f"⚠️ Clicking failed, but proceeding anyway. Error: {e}")
 
-    # 3. Dynamic Wait (FIXED: Removed 2-second sleep)
     print("⏳ Waiting for stream to be requested (max 10s)...")
     try:
-        # Dynamically wait for the first M3U8 response to be captured by the listener
         await page.wait_for_event(
             "response",
             lambda resp: ".m3u8" in resp.url,
@@ -195,9 +189,7 @@ async def grab_m3u8_from_iframe(page, iframe_url):
         print(f"❌ No M3U8 URLs were captured for {iframe_url}")
         return set()
 
-    # 4. Validation 
     valid_urls = set()
-    # Pass the correct iframe_url as the referer to the check function
     tasks = [check_m3u8_url(url, iframe_url) for url in found_streams]
     results = await asyncio.gather(*tasks)
     
@@ -317,7 +309,6 @@ async def main():
     streams = deduped_streams
 
     async with async_playwright() as p:
-        # For debugging, you can set headless=False to watch the browser
         browser = await p.firefox.launch(headless=True)
         context = await browser.new_context()
         page = await context.new_page()
@@ -334,7 +325,6 @@ async def main():
                 print(f"⚠️ No valid streams for {s['name']} ({idx}/{total_streams})")
             url_map[key] = urls
 
-        # Process Live Now
         live_now_streams = await grab_live_now_from_html(page)
         for s in live_now_streams:
             key = f"{s['name']}::{s['category']}::{s['iframe']}"
