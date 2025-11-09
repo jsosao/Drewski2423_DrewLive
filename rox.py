@@ -19,6 +19,7 @@ TV_INFO = {
     "f1": ("Racing.Dummy.us", "http://drewlive24.duckdns.org:9000/Logos/F1.png", "Formula 1"),
     "motorsports": ("Racing.Dummy.us", "http://drewlive24.duckdns.org:9000/Logos/F1.png", "Motorsports"),
     "nascar": ("Racing.Dummy.us", "http://drewlive24.duckdns.org:9000/Logos/Motorsports2.png", "NASCAR Cup Series"),
+    "misc": ("Sports.Dummy.us", "http://drewlive24.duckdns.org:9000/Logos/247.png", "Random Events")
 }
 
 DISCOVERY_KEYWORDS = list(TV_INFO.keys()) + ['streams']
