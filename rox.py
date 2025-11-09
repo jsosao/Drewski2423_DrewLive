@@ -22,21 +22,19 @@ TV_INFO = {
     "misc": ("Sports.Dummy.us", "http://drewlive24.duckdns.org:9000/Logos/247.png", "Random Events")
 }
 
-DISCOVERY_KEYWORDS = list(TV_INFO.keys()) + ['streams']
-SECTION_BLOCKLIST = ['olympia']
+DISCOVERY_KEYWORDS = list(TV_INFO.keys()) + ["streams"]
+SECTION_BLOCKLIST = ["olympia"]
 
 SESSION = requests.Session()
 SESSION.headers.update({
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-    'Referer': BASE_URL
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "Referer": BASE_URL
 })
 
-M3U8_REGEX = re.compile(r'https?://[^\s"\'<>`]+\.m3u8')
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
+M3U8_REGEX = re.compile(r"https?://[^\s\"'<>`]+\.m3u8")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 def discover_sections(base_url):
-    """Finds main category links (e.g., /nba, /ufc)."""
     logging.info(f"Discovering sections on {base_url}...")
     sections_found = []
     try:
@@ -45,34 +43,27 @@ def discover_sections(base_url):
     except RequestException as e:
         logging.error(f"Failed to fetch base URL {base_url}: {e}")
         return []
-
-    soup = BeautifulSoup(resp.text, 'html.parser')
+    soup = BeautifulSoup(resp.text, "html.parser")
     discovered_urls = set()
-
-    for a_tag in soup.find_all('a', href=True):
-        href = a_tag['href']
+    for a_tag in soup.find_all("a", href=True):
+        href = a_tag["href"]
         title = a_tag.get_text(strip=True)
-        if not href or href.startswith(('#', 'javascript:', 'mailto:')) or not title:
+        if not href or href.startswith(("#", "javascript:", "mailto:")) or not title:
             continue
-
         abs_url = urljoin(base_url, href)
-
         if any(blocked in abs_url.lower() for blocked in SECTION_BLOCKLIST):
             continue
-
         if (urlparse(abs_url).netloc == urlparse(base_url).netloc and
                 any(keyword in abs_url.lower() for keyword in DISCOVERY_KEYWORDS) and
                 abs_url not in discovered_urls):
-
             discovered_urls.add(abs_url)
-            logging.info(f"  [Found] {title} -> {abs_url}")
             sections_found.append((abs_url, title))
-
+            logging.info(f"  [Found] {title} -> {abs_url}")
+    if not any("misc" in url.lower() for url, _ in sections_found):
+        sections_found.append((base_url, "Misc"))
     return sections_found
 
-
 def discover_event_links(section_url):
-    """Finds event links from each category page."""
     events = set()
     try:
         resp = SESSION.get(section_url, timeout=10)
@@ -80,14 +71,12 @@ def discover_event_links(section_url):
     except RequestException as e:
         logging.warning(f"  Failed to fetch section page {section_url}: {e}")
         return events
-
-    soup = BeautifulSoup(resp.text, 'html.parser')
-    event_table = soup.find('table', id='eventsTable')
+    soup = BeautifulSoup(resp.text, "html.parser")
+    event_table = soup.find("table", id="eventsTable")
     if not event_table:
         return events
-
-    for a_tag in event_table.find_all('a', href=True):
-        href = a_tag['href']
+    for a_tag in event_table.find_all("a", href=True):
+        href = a_tag["href"]
         title = a_tag.get_text(strip=True)
         if not href or not title:
             continue
@@ -96,9 +85,7 @@ def discover_event_links(section_url):
             events.add((abs_url, title))
     return events
 
-
 def extract_m3u8_links(page_url):
-    """Extracts .m3u8 links from event page."""
     links = set()
     try:
         resp = SESSION.get(page_url, timeout=10)
@@ -108,49 +95,38 @@ def extract_m3u8_links(page_url):
         logging.warning(f"    Failed to fetch event page {page_url}: {e}")
     return links
 
-
 def check_stream_status(m3u8_url):
-    """Validates a .m3u8 stream."""
     try:
         resp = SESSION.head(m3u8_url, timeout=5, allow_redirects=True)
         return resp.status_code == 200
     except RequestException:
         return False
 
-
 def get_tv_info(url):
-    """Matches a section URL to tvg-id, logo, and smart name."""
+    url_lower = url.lower()
     for key, (tvgid, logo, group_name) in TV_INFO.items():
-        if key in url.lower():
+        if key in url_lower:
             return tvgid, logo, group_name
-    return ("Unknown.Dummy.us", "", "Misc")
-
+    return TV_INFO["misc"]
 
 def main():
     playlist_lines = ["#EXTM3U"]
-
     sections = list(discover_sections(BASE_URL))
     if not sections:
         logging.error("No sections discovered.")
         return
-
     logging.info(f"Found {len(sections)} sections. Scraping for events...")
-
     for section_url, section_title in sections:
         logging.info(f"\n--- Processing Section: {section_title} ({section_url}) ---")
-
         tv_id, logo, group_name = get_tv_info(section_url)
         event_links = discover_event_links(section_url)
-
         if not event_links:
             logging.info(f"  No event sub-pages found. Scraping directly.")
             event_links = {(section_url, section_title)}
-
         valid_count = 0
         for event_url, event_title in event_links:
             logging.info(f"  Scraping: {event_title}")
             m3u8_links = extract_m3u8_links(event_url)
-
             for link in m3u8_links:
                 if check_stream_status(link):
                     playlist_lines.append(
@@ -158,19 +134,16 @@ def main():
                     )
                     playlist_lines.append(link)
                     valid_count += 1
-
         logging.info(f"  Added {valid_count} valid streams for {group_name} section.")
-
     output_filename = "Roxiestreams.m3u8"
     try:
         with open(output_filename, "w", encoding="utf-8") as f:
             f.write("\n".join(playlist_lines))
-        logging.info(f"\n--- SUCCESS ---")
+        logging.info("\n--- SUCCESS ---")
         logging.info(f"Playlist saved as {output_filename}")
         logging.info(f"Total valid streams found: {(len(playlist_lines) - 1) // 2}")
     except IOError as e:
         logging.error(f"Failed to write file {output_filename}: {e}")
-
 
 if __name__ == "__main__":
     main()
