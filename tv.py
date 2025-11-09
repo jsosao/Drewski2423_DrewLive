@@ -1,5 +1,6 @@
 import asyncio
 import urllib.parse
+import random
 from pathlib import Path
 from datetime import datetime
 from playwright.async_api import async_playwright
@@ -30,7 +31,9 @@ SPORTS_METADATA = {
     "NHL": {"tvg-id": "NHL.Hockey.Dummy.us", "logo": "http://drewlive24.duckdns.org:9000/Logos/Hockey.png"}
 }
 
+
 def extract_real_m3u8(url: str):
+    """Extract actual .m3u8 URL from ping.gif URLs or direct responses."""
     if "ping.gif" in url and "mu=" in url:
         parsed = urllib.parse.urlparse(url)
         qs = urllib.parse.parse_qs(parsed.query)
@@ -41,6 +44,7 @@ def extract_real_m3u8(url: str):
         return url
     return None
 
+
 async def scrape_tv_urls():
     urls = []
     async with async_playwright() as p:
@@ -49,7 +53,7 @@ async def scrape_tv_urls():
         page = await context.new_page()
 
         print("🔄 Loading /tv channel list...")
-        await page.goto(CHANNEL_LIST_URL)
+        await page.goto(CHANNEL_LIST_URL, wait_until="domcontentloaded", timeout=60000)
         links = await page.locator("ol.list-group a").all()
         hrefs_and_titles = [(await link.get_attribute("href"), await link.text_content())
                             for link in links if await link.get_attribute("href")]
@@ -71,14 +75,28 @@ async def scrape_tv_urls():
                         stream_url = real
 
                 new_page.on("response", handle_response)
-                await new_page.goto(full_url)
 
+                # --- safer goto with retry ---
                 try:
-                    await new_page.get_by_text(f"Load {quality} Stream", exact=True).click(timeout=5000)
-                except:
+                    await new_page.goto(full_url, wait_until="domcontentloaded", timeout=60000)
+                except Exception as e:
+                    print(f"⚠️ Initial load failed ({type(e).__name__}); retrying...")
+                    await asyncio.sleep(3)
+                    try:
+                        await new_page.goto(full_url, wait_until="domcontentloaded", timeout=60000)
+                    except Exception as e2:
+                        print(f"❌ Page failed twice: {e2}")
+                        await new_page.close()
+                        continue
+
+                # Try to click stream button
+                try:
+                    await new_page.get_by_text(f"Load {quality} Stream", exact=True).click(timeout=7000)
+                except Exception:
                     pass
 
-                await asyncio.sleep(4)
+                # wait for responses
+                await asyncio.sleep(random.uniform(4, 6))
                 await new_page.close()
 
                 if stream_url:
@@ -87,8 +105,11 @@ async def scrape_tv_urls():
                 else:
                     print(f"❌ {quality} not found")
 
+                await asyncio.sleep(random.uniform(1.0, 2.0))
+
         await browser.close()
     return urls
+
 
 async def scrape_section_urls(context, section_path, group_name):
     urls = []
@@ -97,9 +118,10 @@ async def scrape_section_urls(context, section_path, group_name):
 
     try:
         page = await context.new_page()
-        await page.goto(section_url)
+        await page.goto(section_url, wait_until="domcontentloaded", timeout=60000)
         links = await page.locator("ol.list-group a").all()
-    except:
+    except Exception as e:
+        print(f"❌ Could not open {section_url}: {e}")
         return urls
 
     if not links:
@@ -114,7 +136,7 @@ async def scrape_section_urls(context, section_path, group_name):
             if href and title_raw:
                 title = " - ".join(line.strip() for line in title_raw.splitlines() if line.strip())
                 hrefs_and_titles.append((href, title))
-        except:
+        except Exception:
             continue
 
     await page.close()
@@ -130,7 +152,7 @@ async def scrape_section_urls(context, section_path, group_name):
             stream_url = None
             try:
                 new_page = await context.new_page()
-            except:
+            except Exception:
                 continue
 
             async def handle_response(response):
@@ -140,12 +162,13 @@ async def scrape_section_urls(context, section_path, group_name):
                     stream_url = real
 
             new_page.on("response", handle_response)
+
             try:
-                await new_page.goto(full_url)
-                await new_page.get_by_text(f"Load {quality} Stream", exact=True).click(timeout=5000)
-                await asyncio.sleep(4)
-            except:
-                pass
+                await new_page.goto(full_url, wait_until="domcontentloaded", timeout=60000)
+                await new_page.get_by_text(f"Load {quality} Stream", exact=True).click(timeout=7000)
+                await asyncio.sleep(random.uniform(4, 6))
+            except Exception as e:
+                print(f"⚠️ {group_name} page load/click failed: {e}")
             await new_page.close()
 
             if stream_url:
@@ -153,7 +176,9 @@ async def scrape_section_urls(context, section_path, group_name):
                 print(f"✅ {quality}: {stream_url}")
             else:
                 print(f"❌ {quality} not found")
+            await asyncio.sleep(random.uniform(1.0, 2.0))
     return urls
+
 
 async def scrape_all_sports_sections():
     all_urls = []
@@ -166,17 +191,20 @@ async def scrape_all_sports_sections():
                 section_urls = await scrape_section_urls(context, section_path, group_name)
                 if section_urls:
                     all_urls.extend(section_urls)
-            except:
+            except Exception as e:
+                print(f"⚠️ Skipped {group_name} due to error: {e}")
                 continue
 
         await browser.close()
     return all_urls
+
 
 def clean_m3u_header(lines):
     lines = [line for line in lines if not line.strip().startswith("#EXTM3U")]
     timestamp = int(datetime.utcnow().timestamp())
     lines.insert(0, f'#EXTM3U url-tvg="https://github.com/Drewski2423/DrewLive/raw/refs/heads/main/DrewLive.xml.gz" # Updated: {timestamp}')
     return lines
+
 
 def replace_tv_urls(lines, tv_urls):
     updated = []
@@ -199,6 +227,7 @@ def replace_tv_urls(lines, tv_urls):
             updated.append(line)
         i += 1
     return updated
+
 
 def refresh_sports_sections(lines, new_sports_urls):
     cleaned_lines = []
@@ -229,6 +258,7 @@ def refresh_sports_sections(lines, new_sports_urls):
         cleaned_lines.append(url)
     return cleaned_lines
 
+
 async def main():
     if not Path(M3U8_FILE).exists():
         print(f"❌ File not found: {M3U8_FILE}")
@@ -253,6 +283,7 @@ async def main():
         f.write("\n".join(lines))
 
     print(f"\n✅ {M3U8_FILE} fully refreshed and working.")
+
 
 if __name__ == "__main__":
     asyncio.run(main())
