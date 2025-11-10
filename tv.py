@@ -217,4 +217,4 @@ async def main():
     print("✅ Done — SD removed, URLs replaced, old sports wiped, new ones appended.")
 
 if __name__ == "__main__":
-    asyncio.run(main
+    asyncio.run(main())
