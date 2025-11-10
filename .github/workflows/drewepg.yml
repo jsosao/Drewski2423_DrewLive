@@ -2,7 +2,7 @@ name: 🔁 Update DrewLive EPG 📺
 
 on:
   schedule:
-    - cron: '0,30 * * * *'
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -38,7 +38,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # --- MATCHES YOUR SCRIPT OUTPUT ---
           git add DrewLive.xml.gz
 
           if git diff --cached --quiet; then
@@ -48,17 +47,27 @@ jobs:
 
           git commit -m "🔁 Auto-update DrewLive EPG ($(date -u +'%Y-%m-%d %H:%M UTC'))"
 
-          # Random delay to avoid push collisions
-          sleep $((RANDOM % 10 + 5))
+          # Random delay to desync concurrent pushes (10–40s)
+          sleep $((RANDOM % 30 + 10))
 
+          # Always fetch latest before rebase
+          git fetch origin main
+
+          if ! git rebase origin/main; then
+            echo "⚠️ Rebase conflict — aborting and retrying safely..."
+            git rebase --abort || true
+            git pull --rebase origin main || exit 1
+          fi
+
+          # Attempt push
           if ! git push origin main; then
-            echo "⚠️ Push failed, attempting safe rebase..."
-            git pull origin main --rebase || {
-              echo "❌ Rebase failed. Stopping to avoid corruption."
-              exit 1
-            }
+            echo "⚠️ Push failed — retrying after short wait..."
+            sleep $((RANDOM % 20 + 10))
+            git pull --rebase origin main
             git push origin main || {
-              echo "❌ Push failed again after rebase."
+              echo "❌ Push failed again — stopping to avoid lock conflict."
               exit 1
             }
           fi
+
+          echo "✅ Successfully updated and pushed DrewLive EPG!"
