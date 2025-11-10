@@ -30,7 +30,8 @@ playlist_urls = [
     "https://raw.githubusercontent.com/Drewski2423/DrewLive/refs/heads/main/Roxiestreams.m3u8",
     "http://drewlive24.duckdns.org:8081/StreamedSU.m3u8",
     "https://raw.githubusercontent.com/Drewski2423/DrewLive/refs/heads/main/FSTV24.m3u8",
-    "http://drewlive24.duckdns.org:8081/StreamEast.m3u8"
+    "http://drewlive24.duckdns.org:8081/StreamEast.m3u8",
+    "http://drewlive24.duckdns.org:8081/StreamBTW.m3u8"
 ]
 
 EPG_URL = "https://github.com/Drewski2423/DrewLive/raw/refs/heads/main/DrewLive.xml.gz"
