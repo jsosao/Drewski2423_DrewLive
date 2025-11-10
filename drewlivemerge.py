@@ -25,7 +25,8 @@ playlist_urls = [
     "https://raw.githubusercontent.com/Drewski2423/DrewLive/refs/heads/main/Roxiestreams.m3u8",
     "https://raw.githubusercontent.com/Drewski2423/DrewLive/refs/heads/main/AriaPlus.m3u8",
     "https://github.com/Drewski2423/DrewLive/raw/refs/heads/main/MadTitan.m3u8",
-    "http://drewlive24.duckdns.org:8081/SlingTV.m3u8"
+    "http://drewlive24.duckdns.org:8081/SlingTV.m3u8",
+    "http://drewlive24.duckdns.org:8081/StreamBTW.m3u8"
 ]
 
 EPG_URL = "https://github.com/Drewski2423/DrewLive/raw/refs/heads/main/DrewLive.xml.gz"
