@@ -14,20 +14,20 @@ jobs:
 
     steps:
       - name: 📥 Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: 🐍 Set up Python 3.11
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: 📦 Install Python dependencies & Playwright
+      - name: 📦 Install Python dependencies & Playwright (Chromium)
         run: |
           python -m pip install --upgrade pip
           pip install playwright urllib3 aiohttp
-          playwright install firefox
+          playwright install chromium
           playwright install-deps
 
       - name: 🎯 Run scraping script
@@ -40,7 +40,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Stage the output
+          # Stage the updated playlist
           git add TheTVApp.m3u8
 
           # Check if file actually changed
@@ -49,12 +49,12 @@ jobs:
             exit 0
           fi
 
-          git commit -m "🔁 Update playlist $(date -u +'%a %b %d %T UTC %Y')"
+          git commit -m "🔁 Update TheTVApp playlist $(date -u +'%a %b %d %T UTC %Y')"
 
           # Small random delay to reduce collisions
           sleep $((RANDOM % 10 + 5))
 
-          # Safe push, fallback merge if rejected
+          # Safe push with fallback
           if ! git push origin main; then
             echo "⚠️ Push rejected. Trying safe fetch + merge..."
             git pull origin main --rebase || {
