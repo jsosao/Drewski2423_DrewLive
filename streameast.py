@@ -1,3 +1,4 @@
+import os
 import asyncio
 import re
 from urllib.parse import urljoin
@@ -7,13 +8,10 @@ from playwright.async_api import async_playwright
 BASE_URL = "https://v2.streameast.ga/"
 M3U8_PATTERN = re.compile(r"https?://[^\s\"']+\.m3u8[^\s\"']*", re.I)
 PLAYLIST_FILE = "StreamEast.m3u8"
-
 ORIGIN = "https://streamcenter.pro"
 REFERER = "https://streamcenter.pro/"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
-
 DEFAULT_LOGO = "https://v2.streameast.ga/icons/favicon-48x48.png"
-
 
 def detect_category(url: str):
     url_lower = url.lower()
@@ -43,27 +41,21 @@ def detect_category(url: str):
         "darts": ("Darts", "Darts.Dummy.us"),
         "billiard": ("Billiards", "BilliardTV.Dummy.us"),
     }
-
     for key, (group, tvg) in mapping.items():
         if f"/{key}/" in url_lower:
             return f"StreamEast - {group}", tvg
     return "StreamEast - All Sports", "Sports.Dummy.us"
 
-
 async def extract_links(page_html):
-    """Extract live match links, team names, and one logo per card."""
     soup = BeautifulSoup(page_html, "html.parser")
     links = []
-
     for a in soup.select("a.uefa-card.live"):
         href = a.get("href")
         if not href:
             continue
         full_url = urljoin(BASE_URL, href)
-
         teams = [t.text.strip() for t in a.select("span.uefa-name") if t.text.strip()]
         title = " vs ".join(teams) if teams else "Unknown Match"
-
         logo_url = None
         for img in a.select("img"):
             src = (img.get("src") or "").strip()
@@ -73,80 +65,73 @@ async def extract_links(page_html):
             break
         if not logo_url:
             logo_url = DEFAULT_LOGO
-
         links.append({"title": title, "url": full_url, "logo": logo_url})
     return links
 
-
 async def find_m3u8(page, url):
-    """Visit match page, trigger player, intercept .m3u8 in real-time."""
     m3u8_found = []
-
     async def on_request(request):
         if ".m3u8" in request.url:
             m3u8_found.append(request.url)
-
     page.on("request", on_request)
-
     try:
         await page.goto(url, wait_until="networkidle", timeout=35000)
-        await page.wait_for_timeout(4000)
-        await page.mouse.click(400, 300)
-        await page.keyboard.press("Space")
-
+        await page.wait_for_timeout(3000)
+        try:
+            await page.mouse.click(400, 300)
+        except: pass
+        try:
+            await page.keyboard.press("Space")
+        except: pass
         try:
             req = await page.wait_for_event(
-                "request",
-                timeout=12000,
-                predicate=lambda r: ".m3u8" in r.url
+                "request", timeout=12000, predicate=lambda r: ".m3u8" in r.url
             )
             return req.url
-        except:
-            pass
-
-        await page.wait_for_timeout(4000)
+        except: pass
+        await page.wait_for_timeout(3000)
     except Exception as e:
         print(f"    [ERROR] Navigation failed: {e}")
-
     if m3u8_found:
         return m3u8_found[0]
-
     html = await page.content()
     match = M3U8_PATTERN.search(html)
     if match:
         return match.group(0)
     return None
 
-
 async def main():
     print("------------------------------------------------------------")
     print("M3U8 Link Finder (StreamEast - Grouped Output)")
     print("------------------------------------------------------------")
-
+    is_github = os.getenv("GITHUB_ACTIONS") == "true"
     async with async_playwright() as p:
         browser = await p.chromium.launch(
-            headless=False,
-            args=["--no-sandbox", "--disable-blink-features=AutomationControlled"]
+            headless=is_github,
+            args=[
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-blink-features=AutomationControlled",
+                "--mute-audio"
+            ]
         )
-        context = await browser.new_context(
-            user_agent=USER_AGENT,
-            ignore_https_errors=True
-        )
-
+        context = await browser.new_context(user_agent=USER_AGENT, ignore_https_errors=True)
         await context.add_init_script(
-            "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
+            "Object.defineProperty(navigator, 'webdriver', {get: () => undefined});"
+            "window.chrome = { runtime: {} };"
+            "Object.defineProperty(navigator, 'languages', {get: () => ['en-US', 'en']});"
+            "Object.defineProperty(navigator, 'plugins', {get: () => [1,2,3,4,5]});"
         )
-
         page = await context.new_page()
-
         print(f"STEP 1: Loading homepage {BASE_URL}")
-        await page.goto(BASE_URL, wait_until="networkidle", timeout=40000)
-        await page.wait_for_timeout(5000)
+        try:
+            await page.goto(BASE_URL, wait_until="networkidle", timeout=40000)
+            await page.wait_for_timeout(5000)
+        except Exception as e:
+            print(f"  [WARN] Homepage load issue: {e}")
         html = await page.content()
-
         matches = await extract_links(html)
         print(f"Found {len(matches)} live match pages. Starting interception...\n")
-
         results = []
         for i, match in enumerate(matches, start=1):
             print(f"[Processing {i}/{len(matches)}] {match['title']}")
@@ -164,7 +149,6 @@ async def main():
                 "group": sport_group,
                 "tvg": tvg_id
             })
-
         with open(PLAYLIST_FILE, "w", encoding="utf-8") as f:
             f.write('#EXTM3U url-tvg="https://epgshare01.online/epgshare01/epg_ripper_DUMMY_CHANNELS.xml.gz"\n')
             for r in results:
@@ -177,7 +161,6 @@ async def main():
                         f'#EXTVLCOPT:http-user-agent={USER_AGENT}\n'
                         f'{r["m3u8"]}\n'
                     )
-
         print("\n============================================================")
         print("BATCH RESULTS: DIRECT M3U8 LINKS")
         print("============================================================")
@@ -188,14 +171,11 @@ async def main():
             print(f"  > Group: {r['group']}  |  TVG-ID: {r['tvg']}")
             print(f"  > Logo: {r['logo']}")
             print(f"  > Stream: {r['m3u8'] or 'NOT FOUND'}")
-
         print("\n============================================================")
         print(f"SUMMARY: {found} of {len(results)} M3U8 links successfully extracted.")
         print("============================================================")
         print(f"Playlist saved to: {PLAYLIST_FILE}")
-
         await browser.close()
-
 
 if __name__ == "__main__":
     asyncio.run(main())
