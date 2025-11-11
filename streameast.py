@@ -8,7 +8,6 @@ BASE_URL = "https://v2.streameast.ga/"
 M3U8_PATTERN = re.compile(r"https?://[^\s\"']+\.m3u8[^\s\"']*", re.I)
 PLAYLIST_FILE = "StreamEast.m3u8"
 
-# --- Headers required for working playback ---
 ORIGIN = "https://streamcenter.pro"
 REFERER = "https://streamcenter.pro/"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
@@ -16,11 +15,8 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 DEFAULT_LOGO = "https://v2.streameast.ga/icons/favicon-48x48.png"
 
 
-# --- Category detection mapping ---
 def detect_category(url: str):
-    """Detect sport type from URL path and assign correct TVG-ID + group-title."""
     url_lower = url.lower()
-
     mapping = {
         "nfl": ("NFL", "NFL.Dummy.us"),
         "ncaaf": ("NCAA Football", "NCAA.Football.Dummy.us"),
@@ -51,7 +47,6 @@ def detect_category(url: str):
     for key, (group, tvg) in mapping.items():
         if f"/{key}/" in url_lower:
             return f"StreamEast - {group}", tvg
-
     return "StreamEast - All Sports", "Sports.Dummy.us"
 
 
@@ -66,11 +61,9 @@ async def extract_links(page_html):
             continue
         full_url = urljoin(BASE_URL, href)
 
-        # Title
         teams = [t.text.strip() for t in a.select("span.uefa-name") if t.text.strip()]
         title = " vs ".join(teams) if teams else "Unknown Match"
 
-        # One logo only
         logo_url = None
         for img in a.select("img"):
             src = (img.get("src") or "").strip()
@@ -81,11 +74,7 @@ async def extract_links(page_html):
         if not logo_url:
             logo_url = DEFAULT_LOGO
 
-        links.append({
-            "title": title,
-            "url": full_url,
-            "logo": logo_url
-        })
+        links.append({"title": title, "url": full_url, "logo": logo_url})
     return links
 
 
@@ -100,7 +89,8 @@ async def find_m3u8(page, url):
     page.on("request", on_request)
 
     try:
-        await page.goto(url, wait_until="domcontentloaded", timeout=25000)
+        await page.goto(url, wait_until="networkidle", timeout=35000)
+        await page.wait_for_timeout(4000)
         await page.mouse.click(400, 300)
         await page.keyboard.press("Space")
 
@@ -134,16 +124,26 @@ async def main():
     print("------------------------------------------------------------")
 
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True, args=["--mute-audio"])
+        browser = await p.chromium.launch(
+            headless=False,
+            args=["--no-sandbox", "--disable-blink-features=AutomationControlled"]
+        )
         context = await browser.new_context(
             user_agent=USER_AGENT,
             ignore_https_errors=True
         )
+
+        await context.add_init_script(
+            "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
+        )
+
         page = await context.new_page()
 
         print(f"STEP 1: Loading homepage {BASE_URL}")
-        await page.goto(BASE_URL, wait_until="domcontentloaded", timeout=20000)
+        await page.goto(BASE_URL, wait_until="networkidle", timeout=40000)
+        await page.wait_for_timeout(5000)
         html = await page.content()
+
         matches = await extract_links(html)
         print(f"Found {len(matches)} live match pages. Starting interception...\n")
 
@@ -165,7 +165,6 @@ async def main():
                 "tvg": tvg_id
             })
 
-        # Write playlist
         with open(PLAYLIST_FILE, "w", encoding="utf-8") as f:
             f.write('#EXTM3U url-tvg="https://epgshare01.online/epgshare01/epg_ripper_DUMMY_CHANNELS.xml.gz"\n')
             for r in results:
