@@ -293,72 +293,53 @@ async def scrape_nba_league(default_logo: str) -> List[Dict]:
 
         try:
             soup = BeautifulSoup(html_content, 'html.parser')
-            schedule_table = soup.find("table", class_="NBA_schedule_container")
-            if not schedule_table:
-                print(" ❌ Could not find NBA schedule table.")
+            schedule_list = soup.find("ol", class_="sports_schedule_container")
+            if not schedule_list:
+                print(" ❌ Could not find NBA schedule list (<ol class='sports_schedule_container'>).")
                 return []
             
-            game_rows = schedule_table.find("tbody").find_all("tr")
+            game_rows = schedule_list.find_all("li", class_="game_item")
             if not game_rows:
-                print(" ❌ Found table but no game rows.")
+                print(" ❌ Found list but no game rows (<li>).")
                 return []
 
             print(f" 🏀 Found {len(game_rows)} potential NBA games in the schedule.")
             
             for row in game_rows:
-                watch_button = None
-                buttons = row.find_all("button", class_="watch_btn")
-                for btn in buttons:
-                    if "bakup_btn" not in btn.get("class", []):
-                        watch_button = btn
-                        break
-                
-                if not watch_button:
-                    continue
-
-                team_name_tags = row.find_all("td", class_="teamvs")
-                if len(team_name_tags) < 2:
+                teamvs_div = row.find("div", class_="teamvs")
+                if not teamvs_div:
                     continue
                 
-                away_team_tag = team_name_tags[0].find("span")
-                home_team_tag = team_name_tags[1].find("span")
-                
-                if not away_team_tag or not home_team_tag:
+                spans = teamvs_div.find_all("span")
+                if len(spans) != 3: 
                     continue
 
-                away_team = away_team_tag.get_text(strip=True)
-                home_team = home_team_tag.get_text(strip=True)
-                game_name = f"{away_team} @ {home_team}"
-
-                logo_tags = row.find_all("td", class_="teamlogo")
-                logo_to_use = default_logo
-                stream_key = None
-
-                if len(logo_tags) == 2:
-                    home_logo_img = logo_tags[1].find("img")
-                    if home_logo_img and home_logo_img.get("src"):
-                        logo_to_use = home_logo_img["src"]
-                        match = re.search(r'/scoreboard/([a-z0-9]+)\.png', logo_to_use, re.I)
-                        if match:
-                            abbr = match.group(1).lower()
-                            stream_key = f"nba_{abbr}"
-                
-                if not stream_key:
-                     print(f" ⚠️ Could not find stream abbreviation for {game_name}. Skipping.")
-                     continue
-
-                stream_url = NBA_STREAM_URL_PATTERN.format(stream_key=stream_key)
-
-                if await verify_stream_url(session, stream_url, headers=NBA_CUSTOM_HEADERS):
-                    results.append({
-                        "name": game_name,
-                        "url": stream_url,
-                        "tvg_id": "NBA.Basketball.Dummy.us",
-                        "tvg_logo": logo_to_use,
-                        "group": "NBAWebcast - Live Games",
-                        "ref": NBA_BASE_URL,
-                        "custom_headers": NBA_CUSTOM_HEADERS,
-                    })
+                try:
+                    away_team = spans[0].get_text(strip=True)
+                    home_team = spans[2].get_text(strip=True)
+                    game_name = f"{away_team} @ {home_team}"
+                    
+                    team_key = home_team.replace(" ", "").lower()
+                    if not team_key:
+                        print(f" ⚠️ Could not create team key for {game_name}. Skipping.")
+                        continue
+                        
+                    stream_key = f"nba_{team_key}"
+                    stream_url = NBA_STREAM_URL_PATTERN.format(stream_key=stream_key)
+                    
+                    if await verify_stream_url(session, stream_url, headers=NBA_CUSTOM_HEADERS):
+                        results.append({
+                            "name": game_name,
+                            "url": stream_url,
+                            "tvg_id": "NBA.Basketball.Dummy.us",
+                            "tvg_logo": default_logo,
+                            "group": "NBAWebcast - Live Games",
+                            "ref": NBA_BASE_URL,
+                            "custom_headers": NBA_CUSTOM_HEADERS,
+                        })
+                except Exception as e:
+                    print(f" ⚠️ Error processing NBA row: {e}")
+                    continue
 
         except Exception as e:
             print(f" ❌ Error parsing NBA HTML or processing rows: {e}")
@@ -392,7 +373,7 @@ async def main():
         scrape_league(NFL_BASE_URL, NFL_CHANNEL_URLS, "NFLWebcast", "NFL.Dummy.us", "http://drewlive24.duckdns.org:9000/Logos/Maxx.png"),
         scrape_league(NHL_BASE_URL, NHL_CHANNEL_URLS, "NHLWebcast", "NHL.Hockey.Dummy.us", "http://drewlive24.duckdns.org:9000/Logos/Hockey.png"),
         scrape_league(MLB_BASE_URL, MLB_CHANNEL_URLS, "MLBWebcast", "MLB.Baseball.Dummy.us", "http://drewlive24.duckdns.org:9000/Logos/MLB.png"),
-        scrape_league(MLS_BASE_URL, MLS_CHANNEL_URLS, "MLSWebcast", "MLS.Soccer.Dummy.us", "http://drewlive24.duckdns.org:9000/Logos/Football2.png"),
+        scrape_league(MLS_BASE_URL, MLS_CHANNEL_URLS, "MLSWebcast", "MLS.Soccer.Dummy.us", "http://drewlive24.duckdns.org:9Image of Football2.png"),
         scrape_nba_league(NBA_DEFAULT_LOGO),
     ]
     results = await asyncio.gather(*tasks)
