@@ -1,8 +1,7 @@
 name: 🔄 Update JapanTV Playlist 🎌
 
 on:
-  schedule:
-    - cron: '0 * * * *'  # ⏰ Every hour (UTC)
+
   workflow_dispatch:     # 🚀 Manual trigger
 
 permissions:
