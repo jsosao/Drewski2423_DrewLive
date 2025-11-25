@@ -2,8 +2,8 @@ name: 🎯 Update AriaPlus Playlist
 
 on:
   workflow_dispatch:   # Manual trigger
-  schedule:           # Scheduled trigger — every hour
-    - cron: "0 * * * *"
+  #schedule:           # Scheduled trigger — every hour
+  #  - cron: "0 * * * *"
 
 jobs:
   update:
