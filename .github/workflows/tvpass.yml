@@ -1,9 +1,7 @@
 name: 🔄 Force Update TVPass Playlist
 
 on:
-  schedule:
-    - cron: '0 * * * *'  # ⏱ Every 1 hour (UTC)
-  workflow_dispatch:      # 🔘 Manual trigger
+
 
 permissions:
   contents: write
@@ -60,3 +58,4 @@ jobs:
               exit 1
             }
           fi
+
