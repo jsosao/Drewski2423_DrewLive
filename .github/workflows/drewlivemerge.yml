@@ -1,8 +1,7 @@
 name: 🚀 Update Merged DrewLive Playlist 📺
 
 on:
-  schedule:
-    - cron: '*/30 * * * *' 
+
   workflow_dispatch:       
 
 permissions:
